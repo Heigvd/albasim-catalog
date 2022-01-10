@@ -1,33 +1,9 @@
 questions:
-- variable: colab.type
+- variable: colab.image_tag
   group: 'Deployement'
-  default: "deployment"
-  description: ""
-  type: enum
-  options:
-    - "deployment"
-    - "branch"
-  required: true
-  label: Kind of colab
-- variable: colab.name
-  group: 'Deployement'
-  label: "Name of the branch/deployment"
-  description: "as defined in the colab war manager"
-  type: string
-  required: true
-- variable: colab.payaratag
-  group: 'Deployement'
-  label: "Payara Image tag"
+  label: "coLAB Image tag"
   default: latest
   type: string
-  required: true
-- variable: colab.warsClaim
-  group: 'Deployement'
-  label: The Wegas War Manager Claim
-  description: "colab must read the wwm clain to get wars and stuff"
-  type: pvc
-  default: ""
-  label: The Wegas War Manager Claim
   required: true
 - variable: ingress.enabled
   group: 'Deployement'
@@ -55,18 +31,84 @@ questions:
   type: string
   default: "1500"
   required: true
-- variable: colab.nbthreads
+- variable: colab.min_threads
   group: "Runtime"
-  label: Number of threads
+  label: Minimnum number of threads
   type: int
-  default: 9
+  default: 8
   required: true
-- variable: colab.nbpopulators
+- variable: colab.max_threads
   group: "Runtime"
-  label: Number of populator deamon
+  label: Maximnum number of threads
   type: int
-  default: 3
+  default: 32
   required: true
+
+- variable: colab.smtp.domain
+  group: SMTP
+  label: eMail domain
+  type: string
+  default: "1500"
+  required: true
+- variable: colab.smtp.auth
+  group: SMTP
+  label: authenticate ?
+  type: boolean
+  default: true
+  show_subquestion_if: true
+  subquestions:
+  - variable: colab.smtp.username
+    label: username
+    type: string
+    required: true
+  - variable: colab.smtp.password
+    label: password
+    type: string
+    type: password
+    required: true
+- variable: colab.smtp.host
+  group: SMTP
+  label: SMTP host
+  type: string
+  required: true
+- variable: colab.smtp.port
+  group: SMTP
+  label: SMTP port
+  type: number
+  default: 587
+  required: true
+- variable: colab.smtp.starttls
+  group: SMTP
+  label: Start TLS?
+  type: boolean
+  default: true
+  required: true
+
+- variable: colab.admin.username
+  group: "Default admin credentials"
+  label: 'first admin username'
+  type: string
+  required: true
+- variable: colab.admin.password
+  group: "Default admin credentials"
+  label: 'iniial admin password'
+  type: password
+  required: true
+- variable: colab.admin.email
+  group: "Default admin credentials"
+  label: 'first admin eMail address'
+  type: string
+  required: true
+
+
+- variable: colab.smtp.password
+  group: "Extra Properties"
+  label: "Custom coLAB properties"
+  descriptiron: "The ones you would set in the colab.properties file"
+  type: multiline
+  default: "colab.localaccount.showcreatebutton=false"
+  required: true
+
 
 - variable: db.name
   group: "SQL Database"
@@ -89,7 +131,7 @@ questions:
 
 - variable: db.useExistingClaim
   group: "SQL Persistence"
-  label: "Use existing claim ?"
+  label: "Use existing claim?"
   type: boolean
   default: false
 - variable: db.existingClaim

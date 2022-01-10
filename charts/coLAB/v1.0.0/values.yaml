@@ -13,7 +13,7 @@ colab:
     username: ""
     password: ""
     host: ""
-    post: 587
+    port: 587
     starttls: true
   admin:
     username: admin
