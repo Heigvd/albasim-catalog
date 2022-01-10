@@ -130,20 +130,20 @@ questions:
   type: 'password'
 
 - variable: db.useExistingClaim
-  group: "SQL Persistence"
+  group: "SQL Database"
   label: "Use existing claim?"
   type: boolean
   default: false
 - variable: db.existingClaim
   show_if: "db.useExistingClaim=true"
-  group: "SQL Persistence"
+  group: "SQL Database"
   default: ""
   description: "If not empty, uses the specified existing PVC instead of creating new one"
   type: pvc
   label: Uses Existing Persistent Volume Claim
   required: true
 - variable: db.size
-  group: "SQL Persistence"
+  group: "SQL Database"
   label: "Volume Size"
   show_if: "db.useExistingClaim=false"
   default: "10Gi"
@@ -151,20 +151,20 @@ questions:
   required: true
 
 - variable: mongo.useExistingClaim
-  group: "MONGO Persistence"
+  group: "MONGO Database"
   label: "Use existing claim ?"
   type: boolean
   default: false
 - variable: mongo.existingClaim
   show_if: "mongo.useExistingClaim=true"
-  group: "MONGO Persistence"
+  group: "MONGO Database"
   default: ""
   description: "If not empty, uses the specified existing PVC instead of creating new one"
   type: pvc
   label: Uses Existing Persistent Volume Claim
   required: true
 - variable: mongo.size
-  group: "MONGO Persistence"
+  group: "MONGO Database"
   label: "Volume Size"
   show_if: "mongo.useExistingClaim=false"
   default: "10Gi"
