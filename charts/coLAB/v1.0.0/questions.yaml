@@ -170,8 +170,3 @@ questions:
   default: "10Gi"
   type: string
   required: true
-- variable: registry.host
-  group: Docker Registry
-  label: Docker Registry
-  required: true
-  type: string
