@@ -1,0 +1,20 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ template "wegas.fullname" . }}
+  labels:
+    app: {{ template "wegas.fullname" . }}
+    chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+spec:
+  type: ClusterIP
+  ports:
+    - port: 443
+      protocol: TCP
+      name: {{ template "wegas.fullname" . }}
+      targetPort: 8181
+  selector:
+    app: {{ template "wegas.fullname" . }}-payara
+    release: {{ .Release.Name }}
+

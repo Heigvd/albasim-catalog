@@ -1,0 +1,20 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ template "wwm.fullname" . }}
+  labels:
+    app: {{ template "wwm.name" . }}
+    chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+spec:
+  type: ClusterIP
+  ports:
+    - port: 80
+      protocol: TCP
+      name: {{ template "wwm.name" . }}
+      targetPort: 80
+  selector:
+    app: {{ template "wwm.name" . }}
+    release: {{ .Release.Name }}
+

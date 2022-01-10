@@ -1,0 +1,39 @@
+{{- if .Values.ingress.enabled -}}
+
+{{- if .Capabilities.APIVersions.Has "networking.k8s.io/v1" }}
+apiVersion: networking.k8s.io/v1 
+{{ else }}
+apiVersion: networking.k8s.io/v1beta1
+{{ end }}
+kind: Ingress
+metadata:
+  name: {{ template "colab.fullname" . }}
+  labels:
+    app: {{ template "colab.fullname" . }}
+    chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+  annotations:
+    ingress.kubernetes.io/protocol: https
+    traefik.ingress.kubernetes.io/max-conn-amount: {{ .Values.colab.max_threads | quote }}
+    traefik.ingress.kubernetes.io/max-conn-extractor-func: request.host
+spec:
+
+  rules:
+  - host: {{ .Values.ingress.hostname }}
+    http:
+      paths:
+      - backend:
+{{- if .Capabilities.APIVersions.Has "networking.k8s.io/v1" }}
+          service:
+            port:
+              number: 8181
+            name: {{ template "colab.fullname" . }}-service
+        path: "/"
+        pathType: Prefix
+{{- else -}}
+        serviceName: {{ template "colab.fullname" . }}-service
+        servicePort: 8181
+{{- end -}}
+
+{{- end -}}

@@ -1,0 +1,21 @@
+apiVersion: v1
+kind: ConfigMap
+data:
+  {{- if .Values.github.authorized_teams  }}
+  GITHUB_AUTHORIZED_TEAMS: {{ .Values.github.authorized_teams }}
+  {{- end }}
+  {{- if .Values.github.authorized_users }}
+  GITHUB_AUTHORIZED_USERS: {{ .Values.github.authorized_users }}
+  {{- end }}
+  GITHUB_REPOSITORY: {{ .Values.github.repository }}
+  GITHUB_APP_ID: {{ .Values.github.app_id }}
+  RANCHER_CLUSTER_ID: {{ .Values.rancher.clusterId }}
+  RANCHER_PROJECT_ID: {{ .Values.rancher.projectId }}
+  RANCHER_URL: {{ .Values.rancher.url }}
+metadata:
+  name: {{ template "wwm.fullname" . }}-config
+  labels:
+    app: {{ template "wwm.name" . }}
+    chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}

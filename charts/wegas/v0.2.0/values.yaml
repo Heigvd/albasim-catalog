@@ -1,0 +1,25 @@
+ingress:
+  enabled: false
+  hostname: null
+wegas:
+  payaratag: latest
+  type: 'branch'
+  name: 'master'
+  java_heap: '1500'
+  nbpopulators: 3
+  nbthreads: 9
+  warsClaim: ""
+db:
+  name: wegas_dev
+  user: user
+  password: null
+  useExistingClaim: false
+  existingClaim: ""
+  size: 10Gi
+mongo:
+  useExistingClaim: false
+  existingClaim: ""
+  size: 10Gi
+registry:
+  host: "registry.albasim.ch"
+  token: ""

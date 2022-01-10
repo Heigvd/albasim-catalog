@@ -1,0 +1,138 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ template "wegas.fullname" . }}-payara
+  generation: 1
+  labels:
+    app: {{ template "wegas.fullname" . }}-payara
+    chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+spec:
+  progressDeadlineSeconds: 600
+  replicas: 1
+  revisionHistoryLimit: 10
+  selector:
+    matchLabels:
+      app: {{ template "wegas.fullname" . }}-payara
+      release: {{ .Release.Name }}
+  strategy:
+    rollingUpdate:
+      maxSurge: 0
+      maxUnavailable: 1
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        app: {{ template "wegas.fullname" . }}-payara
+        chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
+        release: {{ .Release.Name }}
+        externalUrl: {{ .Values.ingress.hostname }}
+      annotations:
+        checksum/config: {{ include (print $.Template.BasePath "/configmap.yaml") . | sha256sum }}
+    spec:
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+            - matchExpressions:
+              - key: wegas
+                operator: In
+                values:
+                - {{ template "wegas.fullname" . }}
+              - key: payara
+                operator: In
+                values:
+                - "true"
+      containers:
+        - name: {{ template "wegas.fullname" . }}-payara
+          image: {{ .Values.registry.host -}} /payara {{- if .Values.wegas.payaratag -}} : {{- .Values.wegas.payaratag -}}  {{- end }}
+          imagePullPolicy: Always
+          livenessProbe:
+            failureThreshold: 3
+            httpGet:
+              path: /
+              port: 8181
+              scheme: HTTPS
+            initialDelaySeconds: 180
+            periodSeconds: 2
+            successThreshold: 1
+            timeoutSeconds: 2
+          readinessProbe:
+            failureThreshold: 50
+            httpGet:
+              path: /
+              port: 8181
+              scheme: HTTPS
+            initialDelaySeconds: 40
+            periodSeconds: 2
+            successThreshold: 2
+            timeoutSeconds: 2
+          resources:
+            requests:
+              memory: {{ .Values.wegas.java_heap }}Mi
+          env:
+            - name: STACK_NAME
+              valueFrom:
+                configMapKeyRef:
+                  key: BRANCH
+                  name: {{ template "wegas.fullname" . }}-config
+                  optional: false
+            - name: HEAP
+              valueFrom:
+                configMapKeyRef:
+                  key: JAVA_HEAP
+                  name: {{ template "wegas.fullname" . }}-config
+                  optional: false
+            - name: DB_USER
+              valueFrom:
+                configMapKeyRef:
+                  key: DB_USER
+                  name: {{ template "wegas.fullname" . }}-config
+                  optional: false
+            - name: DB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  key: DB_PASSWORD
+                  name: {{ template "wegas.fullname" . }}-secret
+                  optional: false
+            - name: DB_HOST
+              value: {{ template "wegas.fullname" . }}-psql
+            - name: MONGO_HOST
+              value: {{ template "wegas.fullname" . }}-mongo
+            - name: DB_NAME
+              valueFrom:
+                configMapKeyRef:
+                  key: DB_NAME
+                  name: {{ template "wegas.fullname" . }}-config
+                  optional: false
+            - name: NB_POPULATORS
+              valueFrom:
+                configMapKeyRef:
+                  key: NB_POPULATORS
+                  name: {{ template "wegas.fullname" . }}-config
+                  optional: false
+            - name: NB_THREADS
+              valueFrom:
+                configMapKeyRef:
+                  key: NB_THREADS
+                  name: {{ template "wegas.fullname" . }}-config
+                  optional: false
+            - name: THIS_NAME
+              value: {{ template "wegas.fullname" . }}
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities: {}
+            privileged: false
+            readOnlyRootFilesystem: false
+            runAsNonRoot: false
+          volumeMounts:
+            - mountPath: /var/lib/wegas
+              name: wars-volume
+              subPath: {{ if (eq .Values.wegas.type "branch") -}} branches {{- else -}} deployments {{- end -}} / {{- .Values.wegas.name }}
+      imagePullSecrets:
+        - name: {{ template "wegas.fullname" . }}-registry
+      volumes:
+      - name: wars-volume
+        persistentVolumeClaim:
+          claimName: {{ .Values.wegas.warsClaim }}

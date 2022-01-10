@@ -1,0 +1,76 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ template "wwm.fullname" . }}
+  generation: 1
+  labels:
+    app: {{ template "wwm.name" . }}
+    chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+spec:
+  progressDeadlineSeconds: 600
+  replicas: 1
+  revisionHistoryLimit: 10
+  selector:
+    matchLabels:
+      app: {{ template "wwm.name" . }}
+      release: {{ .Release.Name }}
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: {{ template "wwm.name" . }}
+        chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
+        release: {{ .Release.Name }}
+      annotations:
+        checksum/config: {{ include (print $.Template.BasePath "/configmap.yaml") . | sha256sum }}
+    spec:
+      containers:
+        - name: {{ .Chart.Name }}
+          image: {{ .Values.registry.host -}}/wegas-war-manager
+          imagePullPolicy: Always
+          resources: {}
+          envFrom:
+          - secretRef:
+              name: {{ template "wwm.fullname" . }}-secret
+              optional: false
+          - configMapRef: 
+              name: {{ template "wwm.fullname" . }}-config
+              optional: false
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities: {}
+            privileged: false
+            readOnlyRootFilesystem: false
+            runAsNonRoot: false
+          volumeMounts:
+            - mountPath: /var/lib/albasim
+              name: wars-volume
+          livenessProbe:
+            failureThreshold: 3
+            httpGet:
+              path: /
+              port: 80
+              scheme: HTTP
+            initialDelaySeconds: 10
+            periodSeconds: 2
+            successThreshold: 1
+            timeoutSeconds: 2
+          readinessProbe:
+            failureThreshold: 3
+            httpGet:
+              path: /
+              port: 80
+              scheme: HTTP
+            initialDelaySeconds: 10
+            periodSeconds: 2
+            successThreshold: 2
+            timeoutSeconds: 2
+      imagePullSecrets:
+        - name: {{ template "wwm.fullname" . }}-registry
+      volumes:
+      - name: wars-volume
+        persistentVolumeClaim:
+          claimName: {{ if .Values.persistence.useExistingClaim }}{{ .Values.persistence.existingClaim }}{{- else }}{{ template "wwm.fullname" . }}-pvc{{- end }}

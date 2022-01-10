@@ -1,0 +1,24 @@
+hostname: ""
+admin:
+  token: ""
+persistence:
+  useExistingClaim: false
+  existingClaim: ""
+  size: 10Gi
+github:
+  repository: "Heigvd/Wegas"
+  admin_token: ""
+  app_id: ""
+  app_secret: ""
+  authorized_teams: ""
+  authorized_users: ""
+rancher:
+  url: ""
+  token: ""
+  clusterId: ""
+  projectId: ""
+registry:
+  token: ""
+telegram:
+  bot_token: ""
+  chat_id: ""

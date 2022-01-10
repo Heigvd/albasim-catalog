@@ -1,0 +1,107 @@
+questions:
+- variable: hostname
+  group: "Service & Load Balancer"
+  default: ""
+  type: hostname
+  required: true
+  label: Hostname
+- variable: persistence.useExistingClaim
+  group: "Persistence"
+  label: "Use existing claim ?"
+  type: boolean
+  default: false
+- variable: persistence.existingClaim
+  show_if: "persistence.useExistingClaim=true"
+  group: "Persistence"
+  default: ""
+  description: "If not empty, uses the specified existing PVC instead of creating new one"
+  type: pvc
+  label: Uses Existing Persistent Volume Claim
+  required: true
+- variable: persistence.size
+  group: "Persistence"
+  label: "Volume Size"
+  show_if: "persistence.useExistingClaim=false"
+  default: "10Gi"
+  type: string
+  required: true
+- variable: github.repository
+  group: "GitHub"
+  default: "Heigvd/Wegas"
+  type: string
+  label: "Repository"
+  required: true
+- variable: github.admin_token
+  group: "GitHub"
+  default: ""
+  type: password
+  label: "Admin token"
+  required: true
+- variable: github.app_id
+  group: "GitHub"
+  default: ""
+  type: string
+  label: "Oauth app id"
+  required: true
+- variable: github.app_secret
+  group: "GitHub"
+  default: ""
+  type: password
+  label: "Oauth app secret"
+  required: true
+- variable: admin.token
+  group: "Access Control"
+  default: ""
+  type: password
+  label: "Admin token"
+  description: "authorized token"
+- variable: github.authorized_teams
+  group: "Access Control"
+  default: ""
+  type: string
+  label: "Authorized Github Teams"
+  description: "comma separated list of Org/Team. Members of such teams are allowed to log in"
+- variable: github.authorized_users
+  group: "Access Control"
+  default: ""
+  type: string
+  label: "Authorized Github Users"
+  description: "comma separated list of github login. Such users are allowed to log in"
+- variable: rancher.url
+  group: "Rancher"
+  type: string
+  label: "Rancher URL"
+  description: "e.g. https://rancher.example.com"
+  required: true
+- variable: rancher.token
+  group: "Rancher"
+  default: ""
+  type: password
+  label: "Admin token"
+  required: true
+- variable: rancher.clusterId
+  group: "Rancher"
+  default: ""
+  type: string
+  label: "Cluster id"
+  description: "eg. c-xxxxx"
+  required: true
+- variable: rancher.projectId
+  group: "Rancher"
+  default: ""
+  type: string
+  label: "Project id"
+  description: "eg. p-xxxxx"
+  required: true
+- variable: registry.host
+  group: Docker Registry
+  label: Albasim registry
+  default: registry.albasim.ch
+  required: true
+  type: string
+- variable: registry.token
+  group: Docker Registry
+  label: Auth token
+  description: "user:password"
+  required: true
+  type: password

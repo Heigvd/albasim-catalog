@@ -1,0 +1,98 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ template "wegas.fullname" . }}-psql
+  generation: 1
+  labels:
+    app: {{ template "wegas.fullname" . }}-psql
+    chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+spec:
+  progressDeadlineSeconds: 600
+  replicas: 1
+  revisionHistoryLimit: 10
+  selector:
+    matchLabels:
+      app: {{ template "wegas.fullname" . }}-psql
+      release: {{ .Release.Name }}
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: {{ template "wegas.fullname" . }}-psql
+        chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
+        release: {{ .Release.Name }}
+      annotations:
+        checksum/config: {{ include (print $.Template.BasePath "/configmap.yaml") . | sha256sum }}
+    spec:
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+            - matchExpressions:
+              - key: {{ template "wegas.fullname" . }}
+                operator: In
+                values:
+                - "true"
+              - key: postgres
+                operator: In
+                values:
+                - "true"
+      containers:
+        - name: {{ template "wegas.fullname" . }}-psql
+          image: postgres:11-alpine
+          imagePullPolicy: Always
+          resources: {}
+          env:
+            - name: POSTGRES_DB
+              valueFrom:
+                configMapKeyRef:
+                  key: DB_NAME
+                  name: {{ template "wegas.fullname" . }}-config
+                  optional: false
+            - name: POSTGRES_USER
+              valueFrom:
+                configMapKeyRef:
+                  key: DB_USER
+                  name: {{ template "wegas.fullname" . }}-config
+                  optional: false
+            - name: POSTGRES_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  key: DB_PASSWORD
+                  name: {{ template "wegas.fullname" . }}-secret
+                  optional: false
+          livenessProbe:
+            failureThreshold: 3
+            initialDelaySeconds: 10
+            periodSeconds: 2
+            successThreshold: 1
+            tcpSocket:
+              port: 5432
+            timeoutSeconds: 2
+          readinessProbe:
+            failureThreshold: 3
+            initialDelaySeconds: 10
+            periodSeconds: 2
+            successThreshold: 2
+            tcpSocket:
+              port: 5432
+            timeoutSeconds: 2
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities: {}
+            privileged: false
+            readOnlyRootFilesystem: false
+            runAsNonRoot: false
+          volumeMounts:
+            - mountPath: /var/lib/postgresql/data
+              name: psql-volume
+              subPath: data
+      imagePullSecrets:
+        - name: {{ template "wegas.fullname" . }}-registry
+      volumes:
+      - name: psql-volume
+        persistentVolumeClaim:
+          claimName: {{ if .Values.db.useExistingClaim -}}{{- .Values.db.existingClaim -}} {{- else -}} {{- template "wegas.fullname" . -}}-psql-pvc {{- end }}
