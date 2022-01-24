@@ -151,22 +151,34 @@ questions:
   required: true
 
 - variable: mongo.useExistingClaim
-  group: "MONGO Database"
+  group: "JCR & MONGO Database"
   label: "Use existing claim ?"
   type: boolean
   default: false
 - variable: mongo.existingClaim
   show_if: "mongo.useExistingClaim=true"
-  group: "MONGO Database"
+  group: "JCR & MONGO Database"
   default: ""
   description: "If not empty, uses the specified existing PVC instead of creating new one"
   type: pvc
   label: Uses Existing Persistent Volume Claim
   required: true
 - variable: mongo.size
-  group: "MONGO Database"
+  group: "JCR & MONGO Database"
   label: "Volume Size"
   show_if: "mongo.useExistingClaim=false"
   default: "10Gi"
   type: string
+  required: true
+- variable: colab.jcr.quota_mo
+  group: "JCR & MONGO Database"
+  label: "Quota per project (MB)"
+  default: 512
+  type: number
+  required: true
+- variable: colab.jcr.maxfile_size_mo
+  group: "JCR & MONGO Database"
+  label: "File max size (MB)"
+  default: 20
+  type: number
   required: true

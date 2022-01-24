@@ -10,6 +10,8 @@ data:
     colab.smtp.host={{ .Values.colab.smtp.host }}
     colab.smtp.port={{ .Values.colab.smtp.port }}
     colab.smtp.starttls={{ .Values.colab.smtp.starttls }} 
+    colab.jcr.maxfile.size.mo={{ .Values.colab.jcr.maxfile_size_mo }}
+    colab.jcr.project.quota.mo={{ .Values.colab.jcr.quota_mo }}
     {{ .Values.colab.extraproperties }}
 metadata:
   name: {{ template "colab.fullname" . }}-user-config

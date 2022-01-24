@@ -19,6 +19,9 @@ colab:
     username: admin
     password: admin
     email: admin@colab.local
+  jcr:
+    quota_mo: 512
+    maxfile_size_mo: 20
   extraproperties: |
     colab.localaccount.showcreatebutton=false
 db:
