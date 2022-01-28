@@ -3,9 +3,9 @@ entries:
   colab:
   - apiVersion: v2
     appVersion: 1.0.0
-    created: "2022-01-28T15:26:49.276468279+01:00"
+    created: "2022-01-28T15:28:59.202167746+01:00"
     description: The co.LAB platform
-    digest: fc0936e592822211a0efa96179428c102ba84e06cab3851aeffc2ca3fb41c446
+    digest: d19306c2d6aeb7da353761cbb1d52e5fc0933a868baf53e070ce97c9140aa1dc
     icon: file://../logo.png
     name: colab
     type: application
@@ -15,7 +15,7 @@ entries:
   wegas:
   - apiVersion: v2
     appVersion: 1.0.0
-    created: "2022-01-28T15:26:49.277557551+01:00"
+    created: "2022-01-28T15:28:59.203408032+01:00"
     description: The Web Game Authoring System
     digest: e746df66b2ee814f2523ecb49b5a1d6188a5b74173a2940b4411c1b34986ed06
     icon: file://../logo.png
@@ -26,7 +26,7 @@ entries:
     version: 1.0.1
   - apiVersion: v2
     appVersion: 1.0.0
-    created: "2022-01-28T15:26:49.277301405+01:00"
+    created: "2022-01-28T15:28:59.203107908+01:00"
     description: The Web Game Authoring System
     digest: 107a26b79bbd024342f731f34319de760ce397cb5b828842e3177650e141ad8a
     icon: file://../logo.png
@@ -37,7 +37,7 @@ entries:
     version: 1.0.0
   - apiVersion: v2
     appVersion: 1.0.0
-    created: "2022-01-28T15:26:49.277034511+01:00"
+    created: "2022-01-28T15:28:59.202789795+01:00"
     description: The Web Game Authoring System
     digest: 5435c85737f243883a163794fac9db938f2f7437194813f99232adeb8f7424a5
     icon: file://../logo.png
@@ -48,7 +48,7 @@ entries:
     version: 0.2.0
   - apiVersion: v2
     appVersion: 1.0.0
-    created: "2022-01-28T15:26:49.276770915+01:00"
+    created: "2022-01-28T15:28:59.202493688+01:00"
     description: The Web Game Authoring System
     digest: 770385aebc846da209360dd5f5008ddcf95973da854928c0e29fa523b030645f
     icon: file://../logo.png
@@ -60,7 +60,7 @@ entries:
   wegas-war-manager:
   - apiVersion: v2
     appVersion: 1.1.0
-    created: "2022-01-28T15:26:49.277972456+01:00"
+    created: "2022-01-28T15:28:59.203892868+01:00"
     description: Wegas War Manager Rancher Chart
     digest: 899d917a258e9b201e4c2e757ba625bd8e161b81e0b73100e9c904cb14df0721
     icon: file://../logo.png
@@ -71,7 +71,7 @@ entries:
     version: 0.2.0
   - apiVersion: v2
     appVersion: 1.0.0
-    created: "2022-01-28T15:26:49.277764203+01:00"
+    created: "2022-01-28T15:28:59.203659729+01:00"
     description: Wegas War Manager Rancher Chart
     digest: 3f65c15b0a87d0838df5bc1f984b171e022c3911da2f92009d74a95bcf8c6b81
     icon: file://../logo.png
@@ -80,4 +80,4 @@ entries:
     urls:
     - wegas-war-manager-0.1.0.tgz
     version: 0.1.0
-generated: "2022-01-28T15:26:49.276016893+01:00"
+generated: "2022-01-28T15:28:59.201506091+01:00"
