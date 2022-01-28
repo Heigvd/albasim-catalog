@@ -79,6 +79,7 @@ spec:
                 - '-U'
                 - colab
                 - '-c'
+                - '"SELECT true;"'
             failureThreshold: 3
             initialDelaySeconds: 10
             periodSeconds: 2
@@ -91,6 +92,7 @@ spec:
                 - '-U'
                 - colab
                 - '-c'
+                - '"SELECT true;"'
             failureThreshold: 3
             initialDelaySeconds: 10
             periodSeconds: 2

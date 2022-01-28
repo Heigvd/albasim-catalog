@@ -13,7 +13,6 @@ metadata:
     traefik.ingress.kubernetes.io/max-conn-amount: {{ .Values.colab.max_threads | quote }}
     traefik.ingress.kubernetes.io/max-conn-extractor-func: request.host
 spec:
-
   rules:
   - host: {{ .Values.ingress.hostname }}
     http:

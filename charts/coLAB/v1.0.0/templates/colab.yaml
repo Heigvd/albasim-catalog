@@ -98,8 +98,8 @@ spec:
             failureThreshold: 3
             httpGet:
               path: /
-              port: 8181
-              scheme: HTTPS
+              port: 8080
+              scheme: HTTP
             initialDelaySeconds: 180
             periodSeconds: 2
             successThreshold: 1
@@ -108,8 +108,8 @@ spec:
             failureThreshold: 50
             httpGet:
               path: /
-              port: 8181
-              scheme: HTTPS
+              port: 8080
+              scheme: HTTP
             initialDelaySeconds: 40
             periodSeconds: 2
             successThreshold: 2
