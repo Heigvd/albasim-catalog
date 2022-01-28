@@ -19,6 +19,6 @@ spec:
     http:
       paths:
       - backend:
-        serviceName: {{ template "colab.fullname" . }}-service
-        servicePort: 8181
+          serviceName: {{ template "colab.fullname" . }}-service
+          servicePort: 8181
 {{- end -}}
