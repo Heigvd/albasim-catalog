@@ -42,8 +42,6 @@ spec:
         app: {{ template "colab.fullname" . }}-psql
         chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
         release: {{ .Release.Name }}
-      annotations:
-        checksum/config: {{ include (print $.Template.BasePath "/config.yaml") . | sha256sum }}
     spec:
       containers:
         - name: {{ template "colab.fullname" . }}-psql
