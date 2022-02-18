@@ -10,7 +10,6 @@ metadata:
     heritage: {{ .Release.Service }}
   annotations:
     ingress.kubernetes.io/protocol: https
-    traefik.ingress.kubernetes.io/max-conn-amount: {{ .Values.colab.max_threads | quote }}
     traefik.ingress.kubernetes.io/max-conn-extractor-func: request.host
 spec:
   rules:
