@@ -98,6 +98,8 @@ spec:
                   optional: false
             - name: DB_HOST
               value: {{ template "wegas.fullname" . }}-psql
+            - name: DB_PORT
+              value: 5432
             - name: MONGO_HOST
               value: {{ template "wegas.fullname" . }}-mongo
             - name: DB_NAME
