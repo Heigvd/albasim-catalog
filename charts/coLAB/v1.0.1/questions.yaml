@@ -1,0 +1,193 @@
+questions:
+- variable: colab.image_tag
+  group: 'Deployement'
+  label: "coLAB Image tag"
+  default: latest
+  type: string
+  required: true
+- variable: ingress.enabled
+  group: 'Deployement'
+  default: true
+  type: boolean
+  label: Expose app using Layer 7 Load Balancer
+  show_subquestion_if: true
+  group: "Services and Load Balancing"
+  subquestions:
+  - variable: ingress.hostname
+    default: ""
+    description: "example.albasim.ch"
+    type: hostname
+    required: true
+    label: Hostname
+- variable: colab.replicas
+  group: "Runtime"
+  label: "Number of replicas"
+  default: 1
+  type: int
+  required: true
+- variable: colab.java_heap
+  group: "Runtime"
+  label: Java Heap Size (in M)
+  type: string
+  default: "1500"
+  required: true
+- variable: colab.gc
+  group: "Runtime"
+  label: Java Garbage Collector
+  type: enum
+  default: "G1GC"
+  options:
+    - "G1GC"
+    - "ZGC"
+  required: true
+- variable: colab.min_threads
+  group: "Runtime"
+  label: Minimnum number of threads
+  type: int
+  default: 8
+  required: true
+- variable: colab.max_threads
+  group: "Runtime"
+  label: Maximnum number of threads
+  type: int
+  default: 32
+  required: true
+
+- variable: colab.smtp.domain
+  group: SMTP
+  label: eMail domain
+  type: string
+  default: "1500"
+  required: true
+- variable: colab.smtp.auth
+  group: SMTP
+  label: authenticate ?
+  type: boolean
+  default: true
+  show_subquestion_if: true
+  subquestions:
+  - variable: colab.smtp.username
+    label: username
+    type: string
+    required: true
+  - variable: colab.smtp.password
+    label: password
+    type: string
+    type: password
+    required: true
+- variable: colab.smtp.host
+  group: SMTP
+  label: SMTP host
+  type: string
+  required: true
+- variable: colab.smtp.port
+  group: SMTP
+  label: SMTP port
+  type: number
+  default: 587
+  required: true
+- variable: colab.smtp.starttls
+  group: SMTP
+  label: Start TLS?
+  type: boolean
+  default: true
+  required: true
+
+- variable: colab.admin.username
+  group: "Default admin credentials"
+  label: 'first admin username'
+  type: string
+  required: true
+- variable: colab.admin.password
+  group: "Default admin credentials"
+  label: 'iniial admin password'
+  type: password
+  required: true
+- variable: colab.admin.email
+  group: "Default admin credentials"
+  label: 'first admin eMail address'
+  type: string
+  required: true
+
+
+- variable: colab.smtp.password
+  group: "Extra Properties"
+  label: "Custom coLAB properties"
+  descriptiron: "The ones you would set in the colab.properties file"
+  type: multiline
+  default: "colab.localaccount.showcreatebutton=false"
+  required: true
+
+
+- variable: db.name
+  group: "SQL Database"
+  label: db name
+  type: string
+  default: "colab_dev"
+  required: true
+- variable: db.user
+  group: "SQL Database"
+  label: user
+  type: string
+  default: "user"
+  required: true
+- variable: db.password
+  group: "SQL Database"
+  label: Password
+  default: ""
+  required: true
+  type: 'password'
+
+- variable: db.useExistingClaim
+  group: "SQL Database"
+  label: "Use existing claim?"
+  type: boolean
+  default: false
+- variable: db.existingClaim
+  show_if: "db.useExistingClaim=true"
+  group: "SQL Database"
+  default: ""
+  description: "If not empty, uses the specified existing PVC instead of creating new one"
+  type: pvc
+  label: Uses Existing Persistent Volume Claim
+  required: true
+- variable: db.size
+  group: "SQL Database"
+  label: "Volume Size"
+  show_if: "db.useExistingClaim=false"
+  default: "10Gi"
+  type: string
+  required: true
+
+- variable: mongo.useExistingClaim
+  group: "JCR & MONGO Database"
+  label: "Use existing claim ?"
+  type: boolean
+  default: false
+- variable: mongo.existingClaim
+  show_if: "mongo.useExistingClaim=true"
+  group: "JCR & MONGO Database"
+  default: ""
+  description: "If not empty, uses the specified existing PVC instead of creating new one"
+  type: pvc
+  label: Uses Existing Persistent Volume Claim
+  required: true
+- variable: mongo.size
+  group: "JCR & MONGO Database"
+  label: "Volume Size"
+  show_if: "mongo.useExistingClaim=false"
+  default: "10Gi"
+  type: string
+  required: true
+- variable: colab.jcr.quota_mo
+  group: "JCR & MONGO Database"
+  label: "Quota per project (MB)"
+  default: 512
+  type: number
+  required: true
+- variable: colab.jcr.maxfile_size_mo
+  group: "JCR & MONGO Database"
+  label: "File max size (MB)"
+  default: 20
+  type: number
+  required: true
