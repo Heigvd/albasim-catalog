@@ -31,6 +31,15 @@ questions:
   type: string
   default: "1500"
   required: true
+- variable: colab.gc
+  group: "Runtime"
+  label: Java Garbage Collector
+  type: enum
+  default: "G1GC"
+  options:
+    - "G1GC"
+    - "ZGC"
+  required: true
 - variable: colab.min_threads
   group: "Runtime"
   label: Minimnum number of threads

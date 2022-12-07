@@ -185,6 +185,14 @@ spec:
             - name: CLUSTER_NAME
               value: {{ template "colab.fullname" . }}_cluster
 
+            - name: GC
+              valueFrom:
+                configMapKeyRef:
+                  key: GC
+                  name: {{ template "colab.fullname" . }}-hard-config
+                  optional: false
+
+
             - name: HEAP_SIZE
               valueFrom:
                 configMapKeyRef:
