@@ -46,7 +46,7 @@ spec:
                 - "true"
       containers:
         - name: {{ template "wegas.fullname" . }}-payara
-          image: {{ .Values.registry.host -}} /payara {{- if .Values.wegas.payaratag -}} : {{- .Values.wegas.payaratag -}}  {{- end }}
+          image: {{ .Values.wegas.docker.image -}}{{- if .Values.wegas.docker.tag -}} : {{- .Values.wegas.docker.tag -}}  {{- end }}
           imagePullPolicy: Always
           livenessProbe:
             failureThreshold: 3
@@ -132,8 +132,6 @@ spec:
             - mountPath: /var/lib/wegas
               name: wars-volume
               subPath: {{ if (eq .Values.wegas.type "branch") -}} branches {{- else -}} deployments {{- end -}} / {{- .Values.wegas.name }}
-      imagePullSecrets:
-        - name: {{ template "wegas.fullname" . }}-registry
       tolerations:
         - key: {{ template "wegas.fullname" . }}
           operator: Equal

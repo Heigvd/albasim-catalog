@@ -15,9 +15,15 @@ questions:
   description: "as defined in the wegas war manager"
   type: string
   required: true
-- variable: wegas.payaratag
+- variable: wegas.docker.image
   group: 'Deployement'
-  label: "Payara Image tag"
+  label: "Image tag"
+  default: 'ghcr.io/heigvd/wegas'
+  type: string
+  required: true
+- variable: wegas.docker.tag
+  group: 'Deployement'
+  label: "Image tag"
   default: latest
   type: string
   required: true
@@ -128,15 +134,3 @@ questions:
   default: "10Gi"
   type: string
   required: true
-- variable: registry.host
-  group: Docker Registry
-  label: Albasim registry
-  required: true
-  type: string
-- variable: registry.token
-  group: Docker Registry
-  label: Auth token
-  default: registry.albasim.ch
-  description: "user:password"
-  required: true
-  type: password

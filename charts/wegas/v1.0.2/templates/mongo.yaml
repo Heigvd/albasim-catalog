@@ -72,8 +72,6 @@ spec:
           volumeMounts:
             - mountPath: /data/db
               name: mongo-volume
-      imagePullSecrets:
-        - name: {{ template "wegas.fullname" . }}-registry
       volumes:
       - name: mongo-volume
         persistentVolumeClaim:

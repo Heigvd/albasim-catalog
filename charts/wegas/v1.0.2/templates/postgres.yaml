@@ -90,8 +90,6 @@ spec:
             - mountPath: /var/lib/postgresql/data
               name: psql-volume
               subPath: data
-      imagePullSecrets:
-        - name: {{ template "wegas.fullname" . }}-registry
       volumes:
       - name: psql-volume
         persistentVolumeClaim:

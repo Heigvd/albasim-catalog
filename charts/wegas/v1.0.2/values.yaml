@@ -10,6 +10,9 @@ wegas:
   nbpopulators: 3
   nbthreads: 9
   warsClaim: ""
+  docker:
+    image: 'ghcr.io/heigvd/wegas'
+    tag: latest
 db:
   name: wegas_dev
   user: user
@@ -21,6 +24,3 @@ mongo:
   useExistingClaim: false
   existingClaim: ""
   size: 10Gi
-registry:
-  host: "registry.albasim.ch"
-  token: ""
