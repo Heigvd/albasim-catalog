@@ -1,0 +1,127 @@
+---
+{{- if not .Values.db.useExistingClaim -}}
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: {{ template "colab.fullname" . }}-psql-pvc
+  labels:
+    app: {{ template "colab.fullname" . }}
+    chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: {{ .Values.db.size | quote }}
+---
+{{ end }}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ template "colab.fullname" . }}-psql
+  labels:
+    app: {{ template "colab.fullname" . }}-psql
+    chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+spec:
+  progressDeadlineSeconds: 600
+  replicas: 1
+  revisionHistoryLimit: 10
+  selector:
+    matchLabels:
+      app: {{ template "colab.fullname" . }}-psql
+      release: {{ .Release.Name }}
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: {{ template "colab.fullname" . }}-psql
+        chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
+        release: {{ .Release.Name }}
+    spec:
+      containers:
+        - name: {{ template "colab.fullname" . }}-psql
+          image: postgres:14-alpine
+          imagePullPolicy: Always
+          resources:
+            requests:
+              memory: 500Mi
+              cpu: 500m
+          env:
+            - name: POSTGRES_DB
+              valueFrom:
+                configMapKeyRef:
+                  key: COLAB_DATABASE_NAME
+                  name: {{ template "colab.fullname" . }}-hard-config
+                  optional: false
+            - name: POSTGRES_USER
+              valueFrom:
+                configMapKeyRef:
+                  key: COLAB_DATABASE_USER
+                  name: {{ template "colab.fullname" . }}-hard-config
+                  optional: false
+            - name: POSTGRES_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  key: COLAB_DATABASE_PASSWORD
+                  name: {{ template "colab.fullname" . }}-secret
+                  optional: false
+          livenessProbe:
+            exec:
+              command:
+                - psql
+                - '-U'
+                - colab
+                - '-c'
+                - 'SELECT true;'
+            failureThreshold: 3
+            initialDelaySeconds: 10
+            periodSeconds: 2
+            successThreshold: 1
+            timeoutSeconds: 2
+          readinessProbe:
+            exec:
+              command:
+                - psql
+                - '-U'
+                - colab
+                - '-c'
+                - 'SELECT true;'
+            failureThreshold: 3
+            initialDelaySeconds: 10
+            periodSeconds: 2
+            successThreshold: 2
+            timeoutSeconds: 2
+          volumeMounts:
+            - mountPath: /var/lib/postgresql/data
+              name: psql-volume
+              subPath: data
+      volumes:
+      - name: psql-volume
+        persistentVolumeClaim:
+          claimName: {{ if .Values.db.useExistingClaim -}}{{- .Values.db.existingClaim -}} {{- else -}} {{- template "colab.fullname" . -}}-psql-pvc {{- end }}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ template "colab.fullname" . }}-psql
+  labels:
+    app: {{ template "colab.fullname" . }}-psql
+    chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+spec:
+  type: ClusterIP
+  ports:
+    - port: 5432
+      protocol: TCP
+      name: {{ template "colab.fullname" . }}-psql
+      targetPort: 5432
+  selector:
+    app: {{ template "colab.fullname" . }}-psql
+    release: {{ .Release.Name }}
+---
