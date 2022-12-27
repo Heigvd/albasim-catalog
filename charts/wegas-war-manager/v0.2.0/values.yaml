@@ -18,6 +18,7 @@ rancher:
   clusterId: ""
   projectId: ""
 registry:
+  host: 'ghcr.io/heigvd'
   token: ""
 telegram:
   bot_token: ""
