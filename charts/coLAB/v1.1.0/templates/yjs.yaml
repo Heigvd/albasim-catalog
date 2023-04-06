@@ -1,0 +1,113 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ template "colab.fullname" . }}-yjs
+  labels:
+    app: {{ template "colab.fullname" . }}-yjs
+    chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+spec:
+  type: ClusterIP
+  ports:
+    - port: 4321
+      protocol: TCP
+      name: {{ template "colab.fullname" . }}-yjs
+      targetPort: 4321
+  selector:
+    app: {{ template "colab.fullname" . }}-yjs
+    release: {{ .Release.Name }}
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ template "colab.fullname" . }}-yjs
+  labels:
+    app: {{ template "colab.fullname" . }}-yjs
+    chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+spec:
+  progressDeadlineSeconds: 600
+  replicas: 1
+  revisionHistoryLimit: 10
+  selector:
+    matchLabels:
+      app: {{ template "colab.fullname" . }}-yjs
+      release: {{ .Release.Name }}
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: {{ template "colab.fullname" . }}-yjs
+        chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
+        release: {{ .Release.Name }}
+      annotations:
+        checksum/config: {{ include (print $.Template.BasePath "/config.yaml") . | sha256sum }}
+    spec:
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+            - matchExpressions:
+              - key: {{ template "colab.fullname" . }}
+                operator: In
+                values:
+                - "true"
+              - key: yjs
+                operator: In
+                values:
+                - "true"
+      containers:
+        - name: {{ template "colab.fullname" . }}-yjs
+          image: ghcr.io/heigvd/colab-yjs {{- if .Values.colab.image_tag -}} : {{- .Values.colab.image_tag -}}  {{- end }}
+          imagePullPolicy: Always
+          livenessProbe:
+            failureThreshold: 3
+            httpGet:
+              path: /
+              port: 4321 # New port
+              scheme: HTTP
+            initialDelaySeconds: 2
+            periodSeconds: 2
+            successThreshold: 1
+            timeoutSeconds: 2
+          readinessProbe:
+            failureThreshold: 50
+            httpGet:
+              path: /
+              port: 4321 # New port
+              scheme: HTTP
+            initialDelaySeconds: 2
+            periodSeconds: 2
+            successThreshold: 2
+            timeoutSeconds: 2
+          resources:
+            requests:
+              memory: 200Mi
+              cpu: 250m
+          env:
+
+            ##
+            # BACKEND 
+            #**************************************************************
+            - name: DBHOST
+              value: mongodb://{{ template "colab.fullname" . }}-mongo/colablexical
+            
+            ##
+            # AUTHHOST 
+            #**************************************************************
+            - name: AUTHHOST
+              value: http://{{ template "colab.fullname" . }}-service:8080/
+
+            - name: PORT
+              value: 4321
+
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities: {}
+            privileged: false
+            readOnlyRootFilesystem: false
+            runAsNonRoot: false
+---

@@ -17,6 +17,11 @@ spec:
     http:
       paths:
       - backend:
+          serviceName: {{ template "colab.fullname" . }}-yjs
+          servicePort: 4321
+        pathType: Prefix
+        path: /yjs
+      - backend:
           serviceName: {{ template "colab.fullname" . }}-service
           servicePort: 8181
 {{- end -}}
