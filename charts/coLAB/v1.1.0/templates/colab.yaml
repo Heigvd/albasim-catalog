@@ -1,0 +1,231 @@
+---
+{{- /*
+ Interal service resolver:
+  - setting ClusterIp to None to resolve to all internal POD ip address
+  - used by pods to cluster together (clustermode = dns:...-internal-service) 
+*/}}
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ template "colab.fullname" . }}-internal-service
+  labels:
+    app: {{ template "colab.fullname" . }}
+    chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+spec:
+  type: ClusterIP
+  clusterIP: None
+  ports:
+    - port: 8181
+      protocol: TCP
+      name: {{ template "colab.fullname" . }}
+      targetPort: 8181
+  selector:
+    app: {{ template "colab.fullname" . }}-payara
+    release: {{ .Release.Name }}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ template "colab.fullname" . }}-service
+  labels:
+    app: {{ template "colab.fullname" . }}
+    chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+spec:
+  type: ClusterIP
+  ports:
+    - port: 8181
+      protocol: TCP
+      name: {{ template "colab.fullname" . }}
+      targetPort: 8181
+  selector:
+    app: {{ template "colab.fullname" . }}-payara
+    release: {{ .Release.Name }}
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ template "colab.fullname" . }}-payara
+  labels:
+    app: {{ template "colab.fullname" . }}-payara
+    chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+spec:
+  progressDeadlineSeconds: 600
+  replicas: {{ .Values.colab.replicas }}
+  revisionHistoryLimit: 10
+  selector:
+    matchLabels:
+      app: {{ template "colab.fullname" . }}-payara
+      release: {{ .Release.Name }}
+  strategy:
+    rollingUpdate:
+      maxSurge: 0
+      maxUnavailable: 1
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        app: {{ template "colab.fullname" . }}-payara
+        chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
+        release: {{ .Release.Name }}
+        externalUrl: {{ .Values.ingress.hostname }}
+      annotations:
+        checksum/config: {{ include (print $.Template.BasePath "/config.yaml") . | sha256sum }}
+    spec:
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+            - matchExpressions:
+              - key: {{ template "colab.fullname" . }}
+                operator: In
+                values:
+                - "true"
+              - key: payara
+                operator: In
+                values:
+                - "true"
+      containers:
+        - name: {{ template "colab.fullname" . }}-payara
+          image: ghcr.io/heigvd/colab {{- if .Values.colab.image_tag -}} : {{- .Values.colab.image_tag -}}  {{- end }}
+          imagePullPolicy: Always
+          livenessProbe:
+            failureThreshold: 3
+            httpGet:
+              path: /
+              port: 8080
+              scheme: HTTP
+            initialDelaySeconds: 180
+            periodSeconds: 2
+            successThreshold: 1
+            timeoutSeconds: 2
+          readinessProbe:
+            failureThreshold: 50
+            httpGet:
+              path: /
+              port: 8080
+              scheme: HTTP
+            initialDelaySeconds: 40
+            periodSeconds: 2
+            successThreshold: 2
+            timeoutSeconds: 2
+          resources:
+            requests:
+              memory: {{ div ( mul .Values.colab.java_heap 180 ) 100 }}Mi
+              cpu: 900m
+          env:
+            ##
+            # SQL Backend
+            #**************************************************************
+            - name: COLAB_DATABASE_HOST
+              value: {{ template "colab.fullname" . }}-psql
+            - name: COLAB_DATABASE_PORT
+              value: "5432"
+            - name: COLAB_DATABASE_NAME
+              valueFrom:
+                configMapKeyRef:
+                  key: COLAB_DATABASE_NAME
+                  name: {{ template "colab.fullname" . }}-hard-config
+                  optional: false
+            - name: COLAB_DATABASE_USER
+              valueFrom:
+                configMapKeyRef:
+                  key: COLAB_DATABASE_USER
+                  name: {{ template "colab.fullname" . }}-hard-config
+                  optional: false
+            - name: COLAB_DATABASE_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  key: COLAB_DATABASE_PASSWORD
+                  name: {{ template "colab.fullname" . }}-secret
+                  optional: false
+
+            ##
+            # JCR Backend
+            #**************************************************************
+            - name: COLAB_JCR_MONGODB_URI
+              value: mongodb://{{ template "colab.fullname" . }}-mongo/oak
+
+            ##
+            # Default credentials
+            #**************************************************************
+            - name: COLAB_DEFAULT_ADMIN_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  key: COLAB_DEFAULT_ADMIN_PASSWORD
+                  name: {{ template "colab.fullname" . }}-secret
+                  optional: false
+
+            - name: COLAB_DEFAULT_ADMIN_USERNAME
+              valueFrom:
+                configMapKeyRef:
+                  key: COLAB_DEFAULT_ADMIN_USERNAME
+                  name: {{ template "colab.fullname" . }}-hard-config
+                  optional: false
+            - name: COLAB_DEFAULT_ADMIN_EMAIL
+              valueFrom:
+                configMapKeyRef:
+                  key: COLAB_DEFAULT_ADMIN_EMAIL
+                  name: {{ template "colab.fullname" . }}-hard-config
+                  optional: false
+
+
+            ##
+            # Server Config
+            #**************************************************************
+            - name: INTERFACES
+              value: 10.*.*.*
+            - name: CLUSTER_MODE
+              value: dns:{{ template "colab.fullname" . }}-internal-service:6900
+            - name: CLUSTER_NAME
+              value: {{ template "colab.fullname" . }}_cluster
+
+            - name: GC
+              valueFrom:
+                configMapKeyRef:
+                  key: GC
+                  name: {{ template "colab.fullname" . }}-hard-config
+                  optional: false
+
+
+            - name: HEAP_SIZE
+              valueFrom:
+                configMapKeyRef:
+                  key: HEAP_SIZE
+                  name: {{ template "colab.fullname" . }}-hard-config
+                  optional: false
+
+            - name: MIN_HTTP_THREADS
+              valueFrom:
+                configMapKeyRef:
+                  key: MIN_HTTP_THREADS
+                  name: {{ template "colab.fullname" . }}-hard-config
+                  optional: true
+            - name: MAX_HTTP_THREADS
+              valueFrom:
+                configMapKeyRef:
+                  key: MAX_HTTP_THREADS
+                  name: {{ template "colab.fullname" . }}-hard-config
+                  optional: true
+            - name: SYSTEM_PROPS
+              value: /etc/colab/colab.properties
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities: {}
+            privileged: false
+            readOnlyRootFilesystem: false
+            runAsNonRoot: false
+          volumeMounts:
+            - mountPath: /etc/colab
+              name: colab-config-file
+      volumes:
+      - configMap:
+          name: {{ template "colab.fullname" . }}-user-config
+          defaultMode: 420
+        name: colab-config-file
+---

@@ -1,0 +1,38 @@
+ingress:
+  enabled: true
+  hostname: "hostname"
+colab:
+  image_tag: 
+  replicas: 1
+  java_heap: 500
+  min_threads: 
+  max_threads: 
+  gc: 'G1GC'
+  smtp:
+    domain: "colab.local"
+    auth: true
+    username: ""
+    password: ""
+    host: ""
+    port: 587
+    starttls: true
+  admin:
+    username: admin
+    password: admin
+    email: admin@colab.local
+  jcr:
+    quota_mo: 512
+    maxfile_size_mo: 20
+  extraproperties: |
+    colab.localaccount.showcreatebutton=false
+db:
+  name: colab
+  user: colab
+  password: colab
+  useExistingClaim: false
+  existingClaim: ""
+  size: 10Gi
+mongo:
+  useExistingClaim: false
+  existingClaim: ""
+  size: 10Gi
