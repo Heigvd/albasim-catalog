@@ -117,7 +117,7 @@ spec:
           resources:
             requests:
               memory: {{ div ( mul .Values.colab.java_heap 180 ) 100 }}Mi
-              cpu: 900m
+              cpu: 700m
           env:
             ##
             # SQL Backend
