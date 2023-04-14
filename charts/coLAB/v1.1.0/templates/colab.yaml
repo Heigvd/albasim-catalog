@@ -17,6 +17,10 @@ spec:
   type: ClusterIP
   clusterIP: None
   ports:
+    - port: 8080
+      protocol: TCP
+      name: {{ template "colab.fullname" . }}-no-ssl
+      targetPort: 8080
     - port: 8181
       protocol: TCP
       name: {{ template "colab.fullname" . }}
@@ -37,6 +41,10 @@ metadata:
 spec:
   type: ClusterIP
   ports:
+    - port: 8080
+      protocol: TCP
+      name: {{ template "colab.fullname" . }}-no-ssl
+      targetPort: 8080
     - port: 8181
       protocol: TCP
       name: {{ template "colab.fullname" . }}
