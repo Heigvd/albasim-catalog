@@ -12,6 +12,7 @@ data:
     colab.smtp.starttls={{ .Values.colab.smtp.starttls }}
     colab.jcr.maxfile.size.mo={{ .Values.colab.jcr.maxfile_size_mo }}
     colab.jcr.project.quota.mo={{ .Values.colab.jcr.quota_mo }}
+    colab.yjs.url=wss://{{ .Values.ingress.hostname }}/yjs
 {{ .Values.colab.extraproperties | indent 4 }}
 metadata:
   name: {{ template "colab.fullname" . }}-user-config
