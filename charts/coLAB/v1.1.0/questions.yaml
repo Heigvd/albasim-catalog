@@ -108,7 +108,7 @@ questions:
   required: true
 
 
-- variable: colab.smtp.password
+- variable: colab.extraproperties
   group: "Extra Properties"
   label: "Custom coLAB properties"
   descriptiron: "The ones you would set in the colab.properties file"
