@@ -102,7 +102,7 @@ spec:
               value: http://{{ template "colab.fullname" . }}-service:8080/
 
             - name: PORT
-              value: 4321
+              value: "4321"
 
           securityContext:
             allowPrivilegeEscalation: false
