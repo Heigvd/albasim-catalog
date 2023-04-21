@@ -1,7 +1,7 @@
 apiVersion: v2
 name: wegas-war-manager
 description: Wegas War Manager Rancher Chart
-icon: file://../logo.png
+icon: https://raw.githubusercontent.com/Heigvd/Wegas/master/wegas-app/src/main/webapp/favicon_pink.png
 type: application
 version: 0.2.0
 appVersion: 1.1.0
