@@ -1,0 +1,23 @@
+{{- if .Values.ingress.enabled -}}
+apiVersion: networking.k8s.io/v1beta1
+kind: Ingress
+metadata:
+  name: {{ template "wegas.fullname" . }}
+  labels:
+    app: {{ template "wegas.fullname" . }}
+    chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+  annotations:
+    ingress.kubernetes.io/protocol: https
+    traefik.ingress.kubernetes.io/max-conn-amount: {{ .Values.wegas.nbthreads | quote }}
+    traefik.ingress.kubernetes.io/max-conn-extractor-func: request.host
+spec:
+  rules:
+  - host: {{ .Values.ingress.hostname }}
+    http:
+      paths:
+      - backend:
+          serviceName: {{ template "wegas.fullname" . }}
+          servicePort: 8181
+{{- end -}}
