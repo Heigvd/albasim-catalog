@@ -67,7 +67,7 @@ spec:
             failureThreshold: 3
             httpGet:
               path: /
-              port: 4321 # New port
+              port: 4321
               scheme: HTTP
             initialDelaySeconds: 2
             periodSeconds: 2
@@ -77,7 +77,7 @@ spec:
             failureThreshold: 50
             httpGet:
               path: /
-              port: 4321 # New port
+              port: 4321
               scheme: HTTP
             initialDelaySeconds: 2
             periodSeconds: 2
