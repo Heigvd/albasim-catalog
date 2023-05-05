@@ -101,7 +101,7 @@ spec:
             # BACKEND 
             #**************************************************************
             - name: DBHOST
-              value: mongodb://{{ template "colab.fullname" . }}-mongo/colablexical
+              value: mongodb://{{ template "colab.fullname" . }}-mongo:27017/colablexical
             
             ##
             # AUTHHOST 
