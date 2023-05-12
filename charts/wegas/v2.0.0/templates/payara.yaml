@@ -31,19 +31,6 @@ spec:
       annotations:
         checksum/config: {{ include (print $.Template.BasePath "/configmap.yaml") . | sha256sum }}
     spec:
-      affinity:
-        nodeAffinity:
-          requiredDuringSchedulingIgnoredDuringExecution:
-            nodeSelectorTerms:
-            - matchExpressions:
-              - key: {{ template "wegas.fullname" . }}
-                operator: In
-                values:
-                - "true"
-              - key: payara
-                operator: In
-                values:
-                - "true"
       containers:
         - name: {{ template "wegas.fullname" . }}-payara
           image: {{ .Values.wegas.docker.image -}}{{- if .Values.wegas.docker.tag -}} : {{- .Values.wegas.docker.tag -}}  {{- end }}
@@ -52,8 +39,8 @@ spec:
             failureThreshold: 120
             httpGet:
               path: /
-              port: 8181
-              scheme: HTTPS
+              port: 80
+              scheme: HTTP
             initialDelaySeconds: 25
             periodSeconds: 5
             successThreshold: 1
@@ -62,8 +49,8 @@ spec:
             failureThreshold: 3
             httpGet:
               path: /
-              port: 8181
-              scheme: HTTPS
+              port: 80
+              scheme: HTTP
             periodSeconds: 2
             successThreshold: 1
             timeoutSeconds: 2
@@ -71,21 +58,26 @@ spec:
             failureThreshold: 1
             httpGet:
               path: /
-              port: 8181
-              scheme: HTTPS
+              port: 80
+              scheme: HTTP
             periodSeconds: 2
             successThreshold: 2
             timeoutSeconds: 2
           resources:
             requests:
               memory: {{ div ( mul .Values.wegas.java_heap 180 ) 100 }}Mi
+              cpu: 1000m
           env:
-            - name: STACK_NAME
-              valueFrom:
-                configMapKeyRef:
-                  key: BRANCH
-                  name: {{ template "wegas.fullname" . }}-config
-                  optional: false
+            - name: INTERFACES
+              value: "10.*.*.*"
+            - name: CLUSTER_MODE
+              value: dns:{{ template "wegas.fullname" . }}-internal:6900
+            - name: SSL_PORT
+              value: "443"
+            - name: HTTP_PORT
+              value: "80"
+            - name: HZ_CLUSTER_NAME
+              value: {{ template "wegas.fullname" . }}-cluster
             - name: HEAP
               valueFrom:
                 configMapKeyRef:
@@ -128,8 +120,6 @@ spec:
                   key: NB_THREADS
                   name: {{ template "wegas.fullname" . }}-config
                   optional: false
-            - name: THIS_NAME
-              value: {{ template "wegas.fullname" . }}
           securityContext:
             allowPrivilegeEscalation: false
             capabilities: {}
@@ -138,14 +128,14 @@ spec:
             runAsNonRoot: false
           volumeMounts:
             - mountPath: /var/lib/wegas
-              name: wars-volume
-              subPath: {{ if (eq .Values.wegas.type "branch") -}} branches {{- else -}} deployments {{- end -}} / {{- .Values.wegas.name }}
+              name: wegas-config-file
       tolerations:
         - key: {{ template "wegas.fullname" . }}
           operator: Equal
           effect: NoSchedule
           value: "true"
       volumes:
-      - name: wars-volume
-        persistentVolumeClaim:
-          claimName: {{ .Values.wegas.warsClaim }}
+        - name: wegas-config-file
+          configMap: 
+            name: {{ template "wegas.fullname" . }}-config
+            defaultMode: 420

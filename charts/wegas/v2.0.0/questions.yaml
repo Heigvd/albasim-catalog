@@ -1,24 +1,8 @@
 questions:
-- variable: wegas.type
-  group: 'Deployement'
-  default: "deployment"
-  description: ""
-  type: enum
-  options:
-    - "deployment"
-    - "branch"
-  required: true
-  label: Kind of wegas
-- variable: wegas.name
-  group: 'Deployement'
-  label: "Name of the branch/deployment"
-  description: "as defined in the wegas war manager"
-  type: string
-  required: true
 - variable: wegas.docker.image
   group: 'Deployement'
-  label: "Image tag"
-  default: 'ghcr.io/heigvd/wegas'
+  label: "Docker image"
+  default: 'ghcr.io/heigvd/wegas-next'
   type: string
   required: true
 - variable: wegas.docker.tag
@@ -26,14 +10,6 @@ questions:
   label: "Image tag"
   default: latest
   type: string
-  required: true
-- variable: wegas.warsClaim
-  group: 'Deployement'
-  label: The Wegas War Manager Claim
-  description: "wegas must read the wwm clain to get wars and stuff"
-  type: pvc
-  default: ""
-  label: The Wegas War Manager Claim
   required: true
 - variable: ingress.enabled
   group: 'Deployement'
@@ -134,3 +110,12 @@ questions:
   default: "10Gi"
   type: string
   required: true
+
+- variable: wegas.wegas_properties
+  group: "Wegas Properties"
+  label: "Custom wegas properties"
+  description: "The ones you would set in the wegas.properties file"
+  type: multiline
+  default: ""
+  required: true
+

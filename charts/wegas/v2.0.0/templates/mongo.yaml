@@ -27,19 +27,6 @@ spec:
       annotations:
         checksum/config: {{ include (print $.Template.BasePath "/configmap.yaml") . | sha256sum }}
     spec:
-      affinity:
-        nodeAffinity:
-          requiredDuringSchedulingIgnoredDuringExecution:
-            nodeSelectorTerms:
-            - matchExpressions:
-              - key: {{ template "wegas.fullname" . }}
-                operator: In
-                values:
-                - "true"
-              - key: mongo
-                operator: In
-                values:
-                - "true"
       containers:
         - name: {{ template "wegas.fullname" . }}-mongo
           image: mongo:4.4
@@ -67,7 +54,10 @@ spec:
             tcpSocket:
               port: 27017
             timeoutSeconds: 2
-          resources: {}
+          resources:
+            requests:
+              cpu: 100m
+              memory: 400Mi
           securityContext:
             allowPrivilegeEscalation: false
             capabilities: {}

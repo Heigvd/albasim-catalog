@@ -27,24 +27,14 @@ spec:
       annotations:
         checksum/config: {{ include (print $.Template.BasePath "/configmap.yaml") . | sha256sum }}
     spec:
-      affinity:
-        nodeAffinity:
-          requiredDuringSchedulingIgnoredDuringExecution:
-            nodeSelectorTerms:
-            - matchExpressions:
-              - key: {{ template "wegas.fullname" . }}
-                operator: In
-                values:
-                - "true"
-              - key: postgres
-                operator: In
-                values:
-                - "true"
       containers:
         - name: {{ template "wegas.fullname" . }}-psql
           image: postgres:11-alpine
           imagePullPolicy: Always
-          resources: {}
+          resources:
+            requests:
+              cpu: 500m
+              memory: 500Mi
           env:
             - name: POSTGRES_DB
               valueFrom:
