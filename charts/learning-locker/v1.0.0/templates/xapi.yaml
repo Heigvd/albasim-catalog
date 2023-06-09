@@ -1,0 +1,34 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ template "ll.fullname" . }}-xapi
+  labels:
+    app: {{ template "ll.fullname" . }}-xapi-deployment
+    helm.sh/chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+spec:
+  progressDeadlineSeconds: 600
+  replicas: 1
+  revisionHistoryLimit: 10
+  strategy:
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
+    type: RollingUpdate
+  selector:
+    matchLabels:
+      app: {{ template "ll.fullname" . }}-xapi-pod
+  template:
+    metadata:
+      labels:
+        app: {{ template "ll.fullname" . }}-xapi-pod
+    spec:
+      containers:
+      - name: {{ template "ll.fullname" . }}-xapi-pod
+        envFrom:
+        - configMapRef:
+            name: {{ template "ll.fullname" . -}}-config
+        image: learninglocker/xapi-service:4.0.8
+        imagePullPolicy: Always
+        resources: {}

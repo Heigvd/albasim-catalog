@@ -1,0 +1,32 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ template "ll.fullname" . }}-redis
+  labels:
+    app: {{ template "ll.fullname" . }}-redis-deployment
+    helm.sh/chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+spec:
+  replicas: 1
+  strategy:
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
+    type: RollingUpdate
+  selector:
+    matchLabels:
+      app: {{ template "ll.fullname" . }}-redis-pod
+  template:
+    metadata:
+      labels:
+        app: {{ template "ll.fullname" . }}-redis-pod
+    spec:
+      containers:
+      - image: redis
+        imagePullPolicy: Always
+        name: {{ template "ll.fullname" . }}-redis-pod
+        envFrom:
+        - configMapRef:
+            name: {{ template "ll.fullname" . -}}-config
+        resources: {}

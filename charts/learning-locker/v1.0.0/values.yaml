@@ -1,0 +1,25 @@
+ingress:
+  enabled: false
+  hostname: null
+smtp:
+  host: localhost
+  user: noreply
+  password: password
+  port: 587
+  secured: true
+  ignore_tls: false
+  require_tls: true
+  from: noreply@learninglocker.local
+
+
+run_migration: true
+
+default_admin:
+  create_site_admin: true
+  username: admin
+  password: Ch4ng3M3
+  org: albasim  
+
+app_secret: null
+
+mongo_pvc_size: 10Gi

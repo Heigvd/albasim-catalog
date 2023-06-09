@@ -1,0 +1,6 @@
+apiVersion: v2
+name: learning-locker
+description: 
+type: application
+version: 1.0.0
+appVersion: 1.0.0

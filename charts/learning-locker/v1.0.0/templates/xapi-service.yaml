@@ -1,0 +1,18 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ template "ll.fullname" . }}-xapi-service
+  labels:
+    app: {{ template "ll.fullname" . }}-xapi-service
+    helm.sh/chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+spec:
+  type: ClusterIP
+  ports:
+  - name: xapi
+    port: 8081
+    protocol: TCP
+    targetPort: 8081
+  selector:
+    app: {{ template "ll.fullname" . }}-xapi-pod

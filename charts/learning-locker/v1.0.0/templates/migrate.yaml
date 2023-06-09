@@ -1,0 +1,30 @@
+{{- if .Values.run_migration -}}
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: {{ template "ll.fullname" . }}-migrate
+  labels:
+    app: {{ template "ll.fullname" . }}-migrate
+    helm.sh/chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+
+spec:
+  completions: 1
+  parallelism: 1
+  template:
+    spec:
+      affinity:
+      containers:
+      - image: ghcr.io/heigvd/ll/cli
+        args:
+          - migrateMongo
+          - "--up"
+        imagePullPolicy: Always
+        name: {{ template "ll.fullname" . }}-migrate
+        resources: {}
+        envFrom:
+        - configMapRef:
+            name: {{ template "ll.fullname" . -}}-config
+      restartPolicy: Never
+{{- end -}}

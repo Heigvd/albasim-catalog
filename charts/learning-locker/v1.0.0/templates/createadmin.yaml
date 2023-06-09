@@ -1,0 +1,32 @@
+{{- if .Values.default_admin.create_site_admin -}}
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: {{ template "ll.fullname" . }}-create-site-admin
+  labels:
+    app: {{ template "ll.fullname" . }}-create-site-admin
+    helm.sh/chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+
+spec:
+  completions: 1
+  parallelism: 1
+  template:
+    spec:
+      affinity:
+      containers:
+      - image: ghcr.io/heigvd/ll/cli
+        args:
+          - createSiteAdmin
+          - {{ .Values.default_admin.username }}
+          - {{ .Values.default_admin.org }}
+          - {{ .Values.default_admin.password }}
+        imagePullPolicy: Always
+        name: {{ template "ll.fullname" . }}-create-site-admin
+        resources: {}
+        envFrom:
+        - configMapRef:
+            name: {{ template "ll.fullname" . -}}-config
+      restartPolicy: Never
+{{- end -}}

@@ -1,0 +1,41 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ template "ll.fullname" . }}-mongo
+  labels:
+    app: {{ template "ll.fullname" . }}-mongo-deployment
+    helm.sh/chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+spec:
+  progressDeadlineSeconds: 600
+  replicas: 1
+  revisionHistoryLimit: 10
+  strategy:
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
+    type: RollingUpdate
+  selector:
+    matchLabels:
+      app: {{ template "ll.fullname" . }}-mongo-pod
+  template:
+    metadata:
+      labels:
+        app: {{ template "ll.fullname" . }}-mongo-pod
+    spec:
+      containers:
+      - image: mongo:3.4
+        imagePullPolicy: Always
+        name: {{ template "ll.fullname" . }}-mongo-pod
+        envFrom:
+        - configMapRef:
+            name: {{ template "ll.fullname" . -}}-config
+        resources: {}
+        volumeMounts:
+        - mountPath: /data/db
+          name: xapi-mongo
+      volumes:
+      - name: xapi-mongo
+        persistentVolumeClaim:
+          claimName: {{ template "ll.fullname" . -}}-mongo-pvc

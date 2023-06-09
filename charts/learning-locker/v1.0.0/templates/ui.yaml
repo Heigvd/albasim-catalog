@@ -1,0 +1,54 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ template "ll.fullname" . }}-ui
+  labels:
+    app: {{ template "ll.fullname" . }}-ui-deployment
+    helm.sh/chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+spec:
+  progressDeadlineSeconds: 600
+  replicas: 1
+  revisionHistoryLimit: 10
+  strategy:
+    rollingUpdate:
+      maxSurge: 0
+      maxUnavailable: 1
+    type: RollingUpdate
+  selector:
+    matchLabels:
+      app: {{ template "ll.fullname" . }}-ui-pod
+  template:
+    metadata:
+      labels:
+        app: {{ template "ll.fullname" . }}-ui-pod
+    spec:
+      containers:
+      - image: ghcr.io/heigvd/ll/ui
+        name: {{ template "ll.fullname" . }}-ui-pod
+        imagePullPolicy: Always
+        envFrom:
+        - configMapRef:
+            name: {{ template "ll.fullname" . -}}-config
+        livenessProbe:
+          failureThreshold: 3
+          httpGet:
+            path: /
+            port: 3000
+            scheme: HTTP
+          initialDelaySeconds: 10
+          periodSeconds: 2
+          successThreshold: 1
+          timeoutSeconds: 2
+        readinessProbe:
+          failureThreshold: 3
+          httpGet:
+            path: /
+            port: 3000
+            scheme: HTTP
+          initialDelaySeconds: 10
+          periodSeconds: 2
+          successThreshold: 2
+          timeoutSeconds: 2
+        resources: {}
