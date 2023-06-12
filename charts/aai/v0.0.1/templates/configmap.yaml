@@ -1,0 +1,18 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: aai
+  namespace: aai
+  labels:
+    app: aai
+data:
+  sp-key.pem: |-
+{{ .Values.shibboleth.spkey | indent 4 }}
+  sp-cert.pem: |-
+{{ .Values.shibboleth.spcert | indent 4 }}
+  shibboleth2.xml: |-
+{{ .Values.shibboleth.shibboleth2 | indent 4 }}
+  security-policy.xml: |-
+{{ .Values.shibboleth.securitypolicy | indent 4 }}
+  SWITCHaaiRootCA.crt.pem: |-
+{{ .Values.shibboleth.SWITCHaaiRootCA | indent 4 }}

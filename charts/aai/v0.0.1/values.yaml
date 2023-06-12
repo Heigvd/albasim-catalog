@@ -1,0 +1,27 @@
+replicaCount: 1
+
+aai:
+  default_root:
+  secret:
+  domain_whitelist:
+
+image: ghcr.io/heigvd/aai
+dockerconfigjson:
+
+pull_secret: ghcr-pull-secret
+
+ingress:
+  enabled: true
+  host:
+  server_port: 443
+
+shibboleth:
+  spkey: |
+
+  spcert: |
+
+  shibboleth2: |
+
+  securitypolicy: |
+
+  SWITCHaaiRootCA: |

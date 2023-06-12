@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: aai
+  namespace: aai
+  labels:
+    app: aai
+spec:
+  ports:
+    - name: https
+      port: {{ .Values.ingress.server_port }}
+      protocol: TCP
+      targetPort: {{ .Values.ingress.server_port }}
+  selector:
+    app: aai
+  type: ClusterIP
