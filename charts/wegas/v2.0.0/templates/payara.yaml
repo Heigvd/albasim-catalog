@@ -30,7 +30,18 @@ spec:
         externalUrl: {{ .Values.ingress.hostname }}
       annotations:
         checksum/config: {{ include (print $.Template.BasePath "/configmap.yaml") . | sha256sum }}
+        rollme: {{ randAlphaNum 5 | quote }}
     spec:
+      affinity:
+        podAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+          - labelSelector:
+              matchExpressions:
+              - key: app
+                operator: In
+                values:
+                - {{ template "wegas.fullname" . }}-psql
+            topologyKey: kubernetes.io/hostname
       containers:
         - name: {{ template "wegas.fullname" . }}-payara
           image: {{ .Values.wegas.docker.image -}}{{- if .Values.wegas.docker.tag -}} : {{- .Values.wegas.docker.tag -}}  {{- end }}
@@ -39,7 +50,7 @@ spec:
             failureThreshold: 120
             httpGet:
               path: /
-              port: 80
+              port: 8080
               scheme: HTTP
             initialDelaySeconds: 25
             periodSeconds: 5
@@ -49,7 +60,7 @@ spec:
             failureThreshold: 3
             httpGet:
               path: /
-              port: 80
+              port: 8080
               scheme: HTTP
             periodSeconds: 2
             successThreshold: 1
@@ -58,7 +69,7 @@ spec:
             failureThreshold: 1
             httpGet:
               path: /
-              port: 80
+              port: 8080
               scheme: HTTP
             periodSeconds: 2
             successThreshold: 2
@@ -69,13 +80,13 @@ spec:
               cpu: 1000m
           env:
             - name: INTERFACES
-              value: "10.*.*.*"
+              value: "172.25.*.*"
             - name: CLUSTER_MODE
               value: dns:{{ template "wegas.fullname" . }}-internal:6900
             - name: SSL_PORT
-              value: "443"
+              value: "8443"
             - name: HTTP_PORT
-              value: "80"
+              value: "8080"
             - name: HZ_CLUSTER_NAME
               value: {{ template "wegas.fullname" . }}-cluster
             - name: HEAP

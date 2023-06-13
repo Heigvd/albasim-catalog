@@ -14,5 +14,6 @@ spec:
   resources:
     requests:
       storage: {{ .Values.mongo.size | quote }}
+  storageClassName: ceph-ssd
 {{- end -}}
 
