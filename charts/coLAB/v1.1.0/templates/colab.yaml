@@ -84,20 +84,21 @@ spec:
         externalUrl: {{ .Values.ingress.hostname }}
       annotations:
         checksum/config: {{ include (print $.Template.BasePath "/config.yaml") . | sha256sum }}
+        rollme: {{ randAlphaNum 5 | quote }}
     spec:
-      affinity:
-        nodeAffinity:
-          requiredDuringSchedulingIgnoredDuringExecution:
-            nodeSelectorTerms:
-            - matchExpressions:
-              - key: {{ template "colab.fullname" . }}
-                operator: In
-                values:
-                - "true"
-              - key: payara
-                operator: In
-                values:
-                - "true"
+      # affinity:
+      #   nodeAffinity:
+      #     requiredDuringSchedulingIgnoredDuringExecution:
+      #       nodeSelectorTerms:
+      #       - matchExpressions:
+      #         - key: {{ template "colab.fullname" . }}
+      #           operator: In
+      #           values:
+      #           - "true"
+      #         - key: payara
+      #           operator: In
+      #           values:
+      #           - "true"
       containers:
         - name: {{ template "colab.fullname" . }}-payara
           image: ghcr.io/heigvd/colab {{- if .Values.colab.image_tag -}} : {{- .Values.colab.image_tag -}}  {{- end }}
@@ -187,7 +188,7 @@ spec:
             # Server Config
             #**************************************************************
             - name: INTERFACES
-              value: 10.*.*.*
+              value: 172.25.*.*
             - name: CLUSTER_MODE
               value: dns:{{ template "colab.fullname" . }}-internal-service:6900
             - name: CLUSTER_NAME
