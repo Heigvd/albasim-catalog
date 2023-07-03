@@ -29,6 +29,12 @@ spec:
         envFrom:
         - configMapRef:
             name: {{ template "ll.fullname" . -}}-config
-        image: learninglocker/xapi-service:4.0.8
+        image: ghcr.io/heigvd/ll/xapi-service:4.0.8
         imagePullPolicy: Always
-        resources: {}
+        resources:
+          requests:
+            memory: 100Mi
+            cpu: 10m
+          limits:
+            memory: 500Mi
+            cpu: 100m
