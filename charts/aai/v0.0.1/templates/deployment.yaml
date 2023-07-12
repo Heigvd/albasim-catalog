@@ -5,6 +5,9 @@ metadata:
   namespace: aai
   labels:
     app: aai
+    chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
 spec:
   replicas: {{ .Values.replicaCount }}
   selector:
@@ -31,6 +34,8 @@ spec:
               value: "true"
             - name: AAI_DOMAIN_WHITELIST
               value: {{ .Values.aai.domain_whitelist }}
+            - name: AAI_ENTITY_ID
+              value: https://{{ .Values.ingress.host }}/shibboleth
           image: {{ .Values.image }}
           imagePullPolicy: Always
           name: aai
