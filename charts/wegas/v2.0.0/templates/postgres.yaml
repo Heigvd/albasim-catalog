@@ -27,6 +27,7 @@ spec:
       annotations:
         checksum/config: {{ include (print $.Template.BasePath "/configmap.yaml") . | sha256sum }}
     spec:
+      priorityClassName: hi-priority-app
       containers:
         - name: {{ template "wegas.fullname" . }}-psql
           image: postgres:11-alpine

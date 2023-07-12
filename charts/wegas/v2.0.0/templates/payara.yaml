@@ -30,18 +30,21 @@ spec:
         externalUrl: {{ .Values.ingress.hostname }}
       annotations:
         checksum/config: {{ include (print $.Template.BasePath "/configmap.yaml") . | sha256sum }}
-        rollme: {{ randAlphaNum 5 | quote }}
+        rollme: {{ .Values.wegas.rollme | quote }}
     spec:
       affinity:
         podAffinity:
-          requiredDuringSchedulingIgnoredDuringExecution:
-          - labelSelector:
-              matchExpressions:
-              - key: app
-                operator: In
-                values:
-                - {{ template "wegas.fullname" . }}-psql
-            topologyKey: kubernetes.io/hostname
+          preferredDuringSchedulingIgnoredDuringExecution:
+            - weight: 100
+              podAffinityTerm:
+                labelSelector:
+                  matchExpressions:
+                  - key: app
+                    operator: In
+                    values:
+                    - {{ template "wegas.fullname" . }}-psql
+                topologyKey: kubernetes.io/hostname
+      priorityClassName: low-priority-app
       containers:
         - name: {{ template "wegas.fullname" . }}-payara
           image: {{ .Values.wegas.docker.image -}}{{- if .Values.wegas.docker.tag -}} : {{- .Values.wegas.docker.tag -}}  {{- end }}
@@ -78,6 +81,9 @@ spec:
             requests:
               memory: {{ div ( mul .Values.wegas.java_heap 180 ) 100 }}Mi
               cpu: 1000m
+            limits:
+              memory: 3800Mi
+              cpu: 1800m
           env:
             - name: INTERFACES
               value: "172.25.*.*"
@@ -140,11 +146,6 @@ spec:
           volumeMounts:
             - mountPath: /var/lib/wegas
               name: wegas-config-file
-      tolerations:
-        - key: {{ template "wegas.fullname" . }}
-          operator: Equal
-          effect: NoSchedule
-          value: "true"
       volumes:
         - name: wegas-config-file
           configMap: 
