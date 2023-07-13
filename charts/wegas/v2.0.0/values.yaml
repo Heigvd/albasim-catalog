@@ -70,6 +70,7 @@ mongo:
   size: 10Gi
 backup:
   enabled: false
+  suspend: false
   pull_secret:
   s3:
     key:

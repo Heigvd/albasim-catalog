@@ -26,6 +26,7 @@ spec:
   - hosts:
     - {{ .Values.ingress.hostname }}
     secretName: {{ .Values.ingress.hostname }}-tls
+  ingressClassName: nginx
   rules:
   - host: {{ .Values.ingress.hostname }}
     http:
