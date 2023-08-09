@@ -3,7 +3,18 @@ entries:
   colab:
   - apiVersion: v2
     appVersion: 1.0.0
-    created: "2023-05-12T15:48:36.864422293+02:00"
+    created: "2023-08-09T10:10:32.540078359+02:00"
+    description: The co.LAB platform
+    digest: 5fbe38c7812624758465664806c6bf6ddad6d0c0332b5ff21d62fb1cea4d91d9
+    icon: https://raw.githubusercontent.com/Heigvd/colab/main/colab-webapp/src/main/node/app/public/favicon_128.png
+    name: colab
+    type: application
+    urls:
+    - colab-2.0.0.tgz
+    version: 2.0.0
+  - apiVersion: v2
+    appVersion: 1.0.0
+    created: "2023-08-09T10:10:32.539765435+02:00"
     description: The co.LAB platform
     digest: 62ebc53c9668c2fdaa15a9fe7d534b86b7131894223b72b4f6b97ff0cf680859
     icon: https://raw.githubusercontent.com/Heigvd/colab/main/colab-webapp/src/main/node/app/public/favicon_128.png
