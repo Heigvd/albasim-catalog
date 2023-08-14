@@ -30,7 +30,21 @@ spec:
         externalUrl: {{ .Values.ingress.hostname }}
       annotations:
         checksum/config: {{ include (print $.Template.BasePath "/configmap.yaml") . | sha256sum }}
+        rollme: {{ .Values.wegas.rollme | quote }}
     spec:
+      affinity:
+        podAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+            - weight: 100
+              podAffinityTerm:
+                labelSelector:
+                  matchExpressions:
+                  - key: app
+                    operator: In
+                    values:
+                    - {{ template "wegas.fullname" . }}-psql
+                topologyKey: kubernetes.io/hostname
+      priorityClassName: low-priority-app
       containers:
         - name: {{ template "wegas.fullname" . }}-payara
           image: {{ .Values.wegas.docker.image -}}{{- if .Values.wegas.docker.tag -}} : {{- .Values.wegas.docker.tag -}}  {{- end }}
@@ -39,7 +53,7 @@ spec:
             failureThreshold: 120
             httpGet:
               path: /
-              port: 80
+              port: 8080
               scheme: HTTP
             initialDelaySeconds: 25
             periodSeconds: 5
@@ -49,7 +63,7 @@ spec:
             failureThreshold: 3
             httpGet:
               path: /
-              port: 80
+              port: 8080
               scheme: HTTP
             periodSeconds: 2
             successThreshold: 1
@@ -58,7 +72,7 @@ spec:
             failureThreshold: 1
             httpGet:
               path: /
-              port: 80
+              port: 8080
               scheme: HTTP
             periodSeconds: 2
             successThreshold: 2
@@ -67,15 +81,18 @@ spec:
             requests:
               memory: {{ div ( mul .Values.wegas.java_heap 180 ) 100 }}Mi
               cpu: 1000m
+            limits:
+              memory: 3800Mi
+              cpu: 1800m
           env:
             - name: INTERFACES
-              value: "10.*.*.*"
+              value: "172.25.*.*"
             - name: CLUSTER_MODE
               value: dns:{{ template "wegas.fullname" . }}-internal:6900
             - name: SSL_PORT
-              value: "443"
+              value: "8443"
             - name: HTTP_PORT
-              value: "80"
+              value: "8080"
             - name: HZ_CLUSTER_NAME
               value: {{ template "wegas.fullname" . }}-cluster
             - name: HEAP
@@ -129,11 +146,6 @@ spec:
           volumeMounts:
             - mountPath: /var/lib/wegas
               name: wegas-config-file
-      tolerations:
-        - key: {{ template "wegas.fullname" . }}
-          operator: Equal
-          effect: NoSchedule
-          value: "true"
       volumes:
         - name: wegas-config-file
           configMap: 

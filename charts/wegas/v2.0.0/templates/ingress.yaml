@@ -9,9 +9,24 @@ metadata:
     release: {{ .Release.Name }}
     heritage: {{ .Release.Service }}
   annotations:
-    traefik.ingress.kubernetes.io/max-conn-amount: {{ .Values.wegas.nbthreads | quote }}
-    traefik.ingress.kubernetes.io/max-conn-extractor-func: request.host
+    nginx.ingress.kubernetes.io/proxy-body-size: 100m
+    #haproxy-ingress.github.io/proxy-body-size: 100m
+    cert-manager.io/cluster-issuer: "letsencrypt-prod"
+    nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"
+    #haproxy-ingress.github.io/backend-protocol: "h1-ssl"
+    #haproxy-ingress.github.io/maxconn-server: "9"
+    #kubernetes.io/ingress.class: haproxy
+    nginx.ingress.kubernetes.io/configuration-snippet: |
+      limit_req zone=rate_limit_per_server burst=100 nodelay;
+      limit_req_status 429;
+    #  limit_conn wegasrestconn_upstream 1;
+    #  limit_conn_status 429;
 spec:
+  tls:
+  - hosts:
+    - {{ .Values.ingress.hostname }}
+    secretName: {{ .Values.ingress.hostname }}-tls
+  ingressClassName: nginx
   rules:
   - host: {{ .Values.ingress.hostname }}
     http:
@@ -21,6 +36,6 @@ spec:
         backend:
           service:
             port:
-              number: 80
+              number: 8443
             name: {{ template "wegas.fullname" . }}
 {{- end -}}

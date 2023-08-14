@@ -5,6 +5,9 @@ metadata:
   namespace: aai
   labels:
     app: aai
+    chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
 spec:
   ports:
     - name: https

@@ -27,6 +27,17 @@ spec:
       annotations:
         checksum/config: {{ include (print $.Template.BasePath "/configmap.yaml") . | sha256sum }}
     spec:
+      affinity:
+        podAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+          - labelSelector:
+              matchExpressions:
+              - key: app
+                operator: In
+                values:
+                - {{ template "wegas.fullname" . }}-psql
+            topologyKey: kubernetes.io/hostname
+      priorityClassName: hi-priority-app
       containers:
         - name: {{ template "wegas.fullname" . }}-mongo
           image: mongo:4.4
@@ -57,7 +68,10 @@ spec:
           resources:
             requests:
               cpu: 100m
-              memory: 400Mi
+              memory: 500Mi
+            limits:
+              cpu: 200m
+              memory: 500Mi
           securityContext:
             allowPrivilegeEscalation: false
             capabilities: {}

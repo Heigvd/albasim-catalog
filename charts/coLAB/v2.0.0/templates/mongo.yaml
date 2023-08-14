@@ -1,0 +1,121 @@
+---
+{{- if not .Values.mongo.useExistingClaim -}}
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: {{ template "colab.fullname" . }}-mongo-pvc
+  labels:
+    app: {{ template "colab.fullname" . }}
+    chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: {{ .Values.mongo.size | quote }}
+  storageClassName: ceph-ssd-retain
+---
+{{- end -}}
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ template "colab.fullname" . }}-mongo
+  labels:
+    app: {{ template "colab.fullname" . }}-mongo
+    chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+spec:
+  type: ClusterIP
+  ports:
+    - port: 27017
+      protocol: TCP
+      name: {{ template "colab.fullname" . }}-mongo
+      targetPort: 27017
+  selector:
+    app: {{ template "colab.fullname" . }}-mongo
+    release: {{ .Release.Name }}
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ template "colab.fullname" . }}-mongo
+  labels:
+    app: {{ template "colab.fullname" . }}-mongo
+    chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+spec:
+  progressDeadlineSeconds: 600
+  replicas: 1
+  revisionHistoryLimit: 10
+  selector:
+    matchLabels:
+      app: {{ template "colab.fullname" . }}-mongo
+      release: {{ .Release.Name }}
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: {{ template "colab.fullname" . }}-mongo
+        chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
+        release: {{ .Release.Name }}
+    spec:
+      affinity:
+        podAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            - labelSelector:
+                matchExpressions:
+                  - key: app
+                    operator: In
+                    values:
+                      - {{ template "colab.fullname" . }}-psql
+              topologyKey: kubernetes.io/hostname
+      priorityClassName: hi-priority-app
+      containers:
+        - name: {{ template "colab.fullname" . }}-mongo
+          image: mongo:4.4
+          args:
+          - --enableMajorityReadConcern
+          imagePullPolicy: Always
+          livenessProbe:
+            failureThreshold: 3
+            initialDelaySeconds: 10
+            periodSeconds: 2
+            successThreshold: 1
+            tcpSocket:
+              port: 27017
+            timeoutSeconds: 2
+          readinessProbe:
+            failureThreshold: 3
+            initialDelaySeconds: 10
+            periodSeconds: 2
+            successThreshold: 2
+            tcpSocket:
+              port: 27017
+            timeoutSeconds: 2
+          resources:
+            requests:
+              cpu: 100m
+              memory: 500Mi
+            limits:
+              cpu: 200m
+              memory: 500Mi
+
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities: {}
+            privileged: false
+            readOnlyRootFilesystem: false
+            runAsNonRoot: false
+          volumeMounts:
+            - mountPath: /data/db
+              name: mongo-volume
+      volumes:
+      - name: mongo-volume
+        persistentVolumeClaim:
+          claimName: {{ if .Values.mongo.useExistingClaim -}}{{- .Values.mongo.existingClaim -}} {{- else -}} {{- template "colab.fullname" . -}}-mongo-pvc {{- end }}
+---

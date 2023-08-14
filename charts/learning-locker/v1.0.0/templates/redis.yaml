@@ -23,10 +23,16 @@ spec:
         app: {{ template "ll.fullname" . }}-redis-pod
     spec:
       containers:
-      - image: redis
+      - image: redis:7.0.11
         imagePullPolicy: Always
         name: {{ template "ll.fullname" . }}-redis-pod
         envFrom:
         - configMapRef:
             name: {{ template "ll.fullname" . -}}-config
-        resources: {}
+        resources:
+          requests:
+            memory: 10Mi
+            cpu: 10m
+          limits:
+            memory: 100Mi
+            cpu: 100m

@@ -23,3 +23,16 @@ default_admin:
 app_secret: null
 
 mongo_pvc_size: 10Gi
+
+backup:
+  enabled: false
+  suspend: false
+  pull_secret:
+  s3:
+    key:
+    secret:
+    bucket:
+    rclone_type:
+    rclone_provider:
+    rclone_endpoint:
+    backup_encryption_password:

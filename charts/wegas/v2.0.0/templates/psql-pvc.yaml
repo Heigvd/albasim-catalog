@@ -14,5 +14,6 @@ spec:
   resources:
     requests:
       storage: {{ .Values.db.size | quote }}
+  storageClassName: ceph-ssd-retain
 {{ end }}
 

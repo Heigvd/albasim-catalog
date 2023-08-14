@@ -1,0 +1,3 @@
+# chart do deploy a backup cronjob for grafana DB
+
+# make sure grafana uses an RWX pvc!

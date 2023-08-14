@@ -4,10 +4,15 @@ kind: Ingress
 metadata:
   labels:
     app: aai
+    chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
   name: aai
   namespace: aai
   annotations:
-    cert-manager.io/cluster-issuer: "letsencrypt-staging"
+    cert-manager.io/cluster-issuer: "letsencrypt-prod"
+    #haproxy-ingress.github.io/backend-protocol: "h1-ssl"
+    #kubernetes.io/ingress.class: haproxy
     nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"
 spec:
   tls:

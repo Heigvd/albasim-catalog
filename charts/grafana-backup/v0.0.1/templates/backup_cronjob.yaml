@@ -1,0 +1,89 @@
+{{- if .Values.backup.enabled -}}
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: {{ template "gb.fullname" . }}-backup-cronjob
+  labels:
+    app: {{ template "gb.fullname" . }}-backup-cronjob
+    chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+spec:
+  successfulJobsHistoryLimit: 3
+  failedJobsHistoryLimit: 1
+  concurrencyPolicy: Forbid
+  suspend: {{ .Values.backup.suspend }}
+  schedule: "30 23 * * *"
+  jobTemplate:
+    spec:
+      activeDeadlineSeconds: 3600
+      backoffLimit: 1
+      template:
+        spec:
+          affinity:
+            podAffinity:
+              requiredDuringSchedulingIgnoredDuringExecution:
+                - labelSelector:
+                    matchExpressions:
+                      - key: app.kubernetes.io/name
+                        operator: In
+                        values:
+                          - grafana
+                  topologyKey: "kubernetes.io/hostname"
+          containers:
+            - env:
+              - name: RCLONE_CONFIG_BACKUP_ACCESS_KEY_ID
+                valueFrom:
+                  secretKeyRef:
+                    key: S3_backup_key
+                    name: {{ template "gb.fullname" . }}-backup-secret
+              - name: RCLONE_CONFIG_BACKUP_SECRET_ACCESS_KEY
+                valueFrom:
+                  secretKeyRef:
+                    key: S3_backup_secret
+                    name: {{ template "gb.fullname" . }}-backup-secret
+              - name: ALBASIM_APP_BACKUP_BUCKET
+                valueFrom:
+                  configMapKeyRef:
+                    name: {{ template "gb.fullname" . }}-backup-configmap
+                    key: backup_bucket
+              - name: RCLONE_CONFIG_BACKUP_TYPE
+                valueFrom:
+                  configMapKeyRef:
+                    name: {{ template "gb.fullname" . }}-backup-configmap
+                    key: rclone_type
+              - name: RCLONE_CONFIG_BACKUP_ENV_AUTH
+                value: "false"
+              - name: RCLONE_CONFIG_BACKUP_PROVIDER
+                valueFrom:
+                  configMapKeyRef:
+                    name: {{ template "gb.fullname" . }}-backup-configmap
+                    key: rclone_provider
+              - name: RCLONE_CONFIG_BACKUP_ENDPOINT
+                valueFrom:
+                  configMapKeyRef:
+                    name: {{ template "gb.fullname" . }}-backup-configmap
+                    key: rclone_endpoint
+              - name: RCLONE_CONFIG_BACKUP_ACL
+                value: private
+              - name: ALBASIM_APP_BACKUP_ENCRYPTION_PASSWORD
+                valueFrom:
+                  secretKeyRef:
+                    key: backup_encryption_password
+                    name: {{ template "gb.fullname" . }}-backup-secret
+                    optional: false
+              image: 'ghcr.io/heigvd/backup-cronjob:1.0.0'
+              name: backup-cronjob
+              imagePullPolicy: Always
+              command: ["/run_backup_grafana.sh"]
+              volumeMounts:
+                - mountPath: /data
+                  name: grafana
+          volumes:
+            - name: grafana
+              persistentVolumeClaim:
+                claimName: {{ .Values.backup.s3.pvc_name }}
+          restartPolicy: OnFailure
+          imagePullSecrets:
+            - name: ghcr-pull-secret
+  {{ end }}

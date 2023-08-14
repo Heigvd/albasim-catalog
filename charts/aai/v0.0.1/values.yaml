@@ -5,7 +5,7 @@ aai:
   secret:
   domain_whitelist:
 
-image: ghcr.io/heigvd/aai
+image: ghcr.io/heigvd/aai:2.0.0
 dockerconfigjson:
 
 pull_secret: ghcr-pull-secret

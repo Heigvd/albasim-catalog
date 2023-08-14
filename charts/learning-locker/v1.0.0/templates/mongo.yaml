@@ -12,10 +12,7 @@ spec:
   replicas: 1
   revisionHistoryLimit: 10
   strategy:
-    rollingUpdate:
-      maxSurge: 1
-      maxUnavailable: 0
-    type: RollingUpdate
+    type: Recreate
   selector:
     matchLabels:
       app: {{ template "ll.fullname" . }}-mongo-pod
@@ -31,7 +28,13 @@ spec:
         envFrom:
         - configMapRef:
             name: {{ template "ll.fullname" . -}}-config
-        resources: {}
+        resources:
+          requests:
+            memory: 500Mi
+            cpu: 100m
+          limits:
+            memory: 500Mi
+            cpu: 200m
         volumeMounts:
         - mountPath: /data/db
           name: xapi-mongo

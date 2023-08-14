@@ -3,6 +3,7 @@ ingress:
   hostname: null
 wegas:
   replicas: 1
+  rollme: 0 #{{ randAlphaNum 5 }}
   payaratag: latest
   java_heap: '1500'
   nbpopulators: 3
@@ -67,3 +68,15 @@ mongo:
   useExistingClaim: false
   existingClaim: ""
   size: 10Gi
+backup:
+  enabled: false
+  suspend: false
+  pull_secret:
+  s3:
+    key:
+    secret:
+    bucket:
+    rclone_type:
+    rclone_provider:
+    rclone_endpoint:
+    backup_encryption_password:

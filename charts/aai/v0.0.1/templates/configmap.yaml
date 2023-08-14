@@ -5,6 +5,9 @@ metadata:
   namespace: aai
   labels:
     app: aai
+    chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
 data:
   sp-key.pem: |-
 {{ .Values.shibboleth.spkey | indent 4 }}
