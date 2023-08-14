@@ -5,6 +5,8 @@ colab:
   image_tag: 
   replicas: 1
   java_heap: 500
+  memRequest: 500Mi
+  cpuRequest: 500m
   min_threads: 
   max_threads: 
   gc: 'G1GC'

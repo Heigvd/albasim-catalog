@@ -78,8 +78,8 @@ spec:
                     key: COLAB_DATABASE_PASSWORD
                     name: {{ template "colab.fullname" . }}-secret
                     optional: false
-              - name: MONGO_DB
-                value: oak
+              - name: MONGO_DBS
+                value: colablexical oak
               - name: MONGO_HOST
                 value: {{ template "colab.fullname" . }}-mongo
               - name: ALBASIM_APP_BACKUP_ENCRYPTION_PASSWORD
@@ -88,7 +88,7 @@ spec:
                     key: backup_encryption_password
                     name: {{ template "colab.fullname" . }}-backup-secret
                     optional: false
-              image: 'ghcr.io/heigvd/backup-cronjob:1.0.1'
+              image: 'ghcr.io/heigvd/backup-cronjob:1.0.2'
               name: backup-cronjob
               imagePullPolicy: Always
               command: ["bash", "-c", "/run_backup_psql.sh;/run_backup_mongo.sh"]
