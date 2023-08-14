@@ -45,21 +45,20 @@ spec:
         release: {{ .Release.Name }}
       annotations:
         checksum/config: {{ include (print $.Template.BasePath "/config.yaml") . | sha256sum }}
-        rollme: {{ randAlphaNum 5 | quote }}
     spec:
-      # affinity:
-      #   nodeAffinity:
-      #     requiredDuringSchedulingIgnoredDuringExecution:
-      #       nodeSelectorTerms:
-      #       - matchExpressions:
-      #         - key: {{ template "colab.fullname" . }}
-      #           operator: In
-      #           values:
-      #           - "true"
-      #         - key: yjs
-      #           operator: In
-      #           values:
-      #           - "true"
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+            - matchExpressions:
+              - key: {{ template "colab.fullname" . }}
+                operator: In
+                values:
+                - "true"
+              - key: yjs
+                operator: In
+                values:
+                - "true"
       containers:
         - name: {{ template "colab.fullname" . }}-yjs
           image: ghcr.io/heigvd/colab-yjs {{- if .Values.colab.image_tag -}} : {{- .Values.colab.image_tag -}}  {{- end }}

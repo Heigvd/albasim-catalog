@@ -15,7 +15,6 @@ spec:
   resources:
     requests:
       storage: {{ .Values.mongo.size | quote }}
-  storageClassName: ceph-ssd
 ---
 {{- end -}}
 apiVersion: v1
@@ -64,19 +63,19 @@ spec:
         chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
         release: {{ .Release.Name }}
     spec:
-      # affinity:
-      #   nodeAffinity:
-      #     requiredDuringSchedulingIgnoredDuringExecution:
-      #       nodeSelectorTerms:
-      #       - matchExpressions:
-      #         - key: {{ template "colab.fullname" . }}
-      #           operator: In
-      #           values:
-      #           - "true"
-      #         - key: mongo
-      #           operator: In
-      #           values:
-      #           - "true"
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+            - matchExpressions:
+              - key: {{ template "colab.fullname" . }}
+                operator: In
+                values:
+                - "true"
+              - key: mongo
+                operator: In
+                values:
+                - "true"
       containers:
         - name: {{ template "colab.fullname" . }}-mongo
           image: mongo:4.4
