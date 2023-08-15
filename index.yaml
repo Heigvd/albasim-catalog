@@ -1,11 +1,22 @@
 apiVersion: v1
 entries:
+  aai:
+  - apiVersion: v2
+    appVersion: 1.0.0
+    created: "2023-08-15T11:53:17.04813543+02:00"
+    description: Switch AAI Authentication
+    digest: 587027a21314f8f947a55eee231b21a1e2bbe65dc06a5997d64a82c8cba3296b
+    name: aai
+    type: application
+    urls:
+    - aai-0.0.1.tgz
+    version: 0.0.1
   colab:
   - apiVersion: v2
     appVersion: 1.0.0
-    created: "2023-08-09T10:10:32.540078359+02:00"
+    created: "2023-08-15T11:53:17.049133586+02:00"
     description: The co.LAB platform
-    digest: 5fbe38c7812624758465664806c6bf6ddad6d0c0332b5ff21d62fb1cea4d91d9
+    digest: 6dc5c800aaa8a6501766145bb01c48d41583f3814458d9551de45a1e7dc4d5b8
     icon: https://raw.githubusercontent.com/Heigvd/colab/main/colab-webapp/src/main/node/app/public/favicon_128.png
     name: colab
     type: application
@@ -67,9 +78,9 @@ entries:
   wegas:
   - apiVersion: v2
     appVersion: 1.0.0
-    created: "2023-05-12T15:48:36.867420658+02:00"
+    created: "2023-08-15T11:53:17.051817838+02:00"
     description: The Web Game Authoring System
-    digest: 1cdbe73dec89592a21076b4dfee6a10205e2f3417a04abf08457c5a20e43145c
+    digest: e2900d451b86ad9f8590ee31d0f18773962af46bdbde262ac0c0ca8da77c8608
     icon: https://raw.githubusercontent.com/Heigvd/Wegas/master/wegas-app/src/main/webapp/wegas-app/images/logo_wegas_130.png
     name: wegas
     type: application
@@ -165,4 +176,4 @@ entries:
     urls:
     - wegas-war-manager-0.1.0.tgz
     version: 0.1.0
-generated: "2023-05-12T15:48:36.855864739+02:00"
+generated: "2023-08-15T11:53:17.047855879+02:00"
