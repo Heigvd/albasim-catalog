@@ -78,7 +78,7 @@ spec:
                     key: DB_PASSWORD
                     name: {{ template "wegas.fullname" . }}-secret
                     optional: false
-              - name: MONGO_DB
+              - name: MONGO_DBS
                 value: oak
               - name: MONGO_HOST
                 value: {{ template "wegas.fullname" . }}-mongo
@@ -88,10 +88,20 @@ spec:
                     key: backup_encryption_password
                     name: {{ template "wegas.fullname" . }}-backup-secret
                     optional: false
-              image: 'ghcr.io/heigvd/backup-cronjob:1.0.0'
+              image: 'ghcr.io/heigvd/backup-cronjob:1.0.2'
               name: backup-cronjob
               imagePullPolicy: Always
               command: ["bash", "-c", "/run_backup_psql.sh;/run_backup_mongo.sh"]
+              securityContext:
+                allowPrivilegeEscalation: false
+                privileged: false
+                readOnlyRootFilesystem: false
+                runAsNonRoot: true
+                capabilities:
+                  drop:
+                    - ALL
+                seccompProfile:
+                  type: RuntimeDefault
           restartPolicy: OnFailure
           imagePullSecrets:
             - name: ghcr-pull-secret

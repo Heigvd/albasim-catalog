@@ -6,6 +6,9 @@ wegas:
   rollme: 0 #{{ randAlphaNum 5 }}
   payaratag: latest
   java_heap: '1500'
+  cpuRequest: 500m
+  cpuLimit: 1800m
+  memLimit: 3800Mi
   nbpopulators: 3
   nbthreads: 9
   docker:

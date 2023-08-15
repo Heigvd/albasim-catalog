@@ -80,10 +80,10 @@ spec:
           resources:
             requests:
               memory: {{ div ( mul .Values.wegas.java_heap 180 ) 100 }}Mi
-              cpu: 1000m
+              cpu: {{ .Values.wegas.cpuRequest }}
             limits:
-              memory: 3800Mi
-              cpu: 1800m
+              memory: {{ .Values.wegas.memLimit }}
+              cpu: {{ .Values.wegas.cpuLimit }}
           env:
             - name: INTERFACES
               value: "172.25.*.*"
@@ -139,10 +139,15 @@ spec:
                   optional: false
           securityContext:
             allowPrivilegeEscalation: false
-            capabilities: {}
             privileged: false
             readOnlyRootFilesystem: false
-            runAsNonRoot: false
+            runAsNonRoot: true
+            runAsUser: 10110
+            capabilities:
+              drop:
+                - ALL
+            seccompProfile:
+              type: RuntimeDefault
           volumeMounts:
             - mountPath: /var/lib/wegas
               name: wegas-config-file
