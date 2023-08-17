@@ -14,9 +14,9 @@ entries:
   colab:
   - apiVersion: v2
     appVersion: 1.0.0
-    created: "2023-08-15T11:53:17.049133586+02:00"
+    created: "2023-08-17T10:39:44.5585559+02:00"
     description: The co.LAB platform
-    digest: 6dc5c800aaa8a6501766145bb01c48d41583f3814458d9551de45a1e7dc4d5b8
+    digest: b31f6105408acd9c4854ea5e12cec27e7657a7049ba9be53f6cd2e587d1fa42b
     icon: https://raw.githubusercontent.com/Heigvd/colab/main/colab-webapp/src/main/node/app/public/favicon_128.png
     name: colab
     type: application
@@ -176,4 +176,4 @@ entries:
     urls:
     - wegas-war-manager-0.1.0.tgz
     version: 0.1.0
-generated: "2023-08-15T11:53:17.047855879+02:00"
+generated: "2023-08-17T10:39:44.5569769+02:00"
