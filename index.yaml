@@ -59,17 +59,8 @@ entries:
   learning-locker:
   - apiVersion: v2
     appVersion: 1.0.0
-    created: "2023-07-04T10:35:11.835829604+02:00"
-    digest: c4482821a25b98262409f1fae3754317775e1d9caf7630c078deb01e9369e2ca
-    name: learning-locker
-    type: application
-    urls:
-    - learning-locker-1.0.1.tgz
-    version: 1.0.1
-  - apiVersion: v2
-    appVersion: 1.0.0
-    created: "2023-07-04T10:35:11.835619632+02:00"
-    digest: e178397bebcaf223856a5ffc2ff54dc7c46f2a517c8c8e573125a6bcf2a83eb1
+    created: "2023-08-18T10:51:16.691287824+02:00"
+    digest: 491ea6378015a170e490d0e0ecf312bc1d62e89b4f6a411070141e6e3d0ad02b
     name: learning-locker
     type: application
     urls:
@@ -176,4 +167,4 @@ entries:
     urls:
     - wegas-war-manager-0.1.0.tgz
     version: 0.1.0
-generated: "2023-08-17T10:39:44.5569769+02:00"
+generated: "2023-08-18T10:51:16.687829222+02:00"

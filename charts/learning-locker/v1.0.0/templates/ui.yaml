@@ -24,6 +24,18 @@ spec:
       labels:
         app: {{ template "ll.fullname" . }}-ui-pod
     spec:
+      affinity:
+        podAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+              - weight: 100
+                podAffinityTerm:
+                  labelSelector:
+                    matchExpressions:
+                      - key: app
+                        operator: In
+                        values:
+                          - {{ template "ll.fullname" . }}-mongo-pod
+                  topologyKey: kubernetes.io/hostname
       containers:
       - image: ghcr.io/heigvd/ll/ui
         name: {{ template "ll.fullname" . }}-ui-pod

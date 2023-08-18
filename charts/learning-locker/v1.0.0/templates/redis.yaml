@@ -22,6 +22,18 @@ spec:
       labels:
         app: {{ template "ll.fullname" . }}-redis-pod
     spec:
+      affinity:
+        podAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+              - weight: 100
+                podAffinityTerm:
+                  labelSelector:
+                    matchExpressions:
+                      - key: app
+                        operator: In
+                        values:
+                          - {{ template "ll.fullname" . }}-mongo-pod
+                  topologyKey: kubernetes.io/hostname
       containers:
       - image: redis:7.0.11
         imagePullPolicy: Always

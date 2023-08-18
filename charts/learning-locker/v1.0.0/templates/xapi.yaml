@@ -24,6 +24,18 @@ spec:
       labels:
         app: {{ template "ll.fullname" . }}-xapi-pod
     spec:
+      affinity:
+        podAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+              - weight: 100
+                podAffinityTerm:
+                  labelSelector:
+                    matchExpressions:
+                      - key: app
+                        operator: In
+                        values:
+                          - {{ template "ll.fullname" . }}-mongo-pod
+                  topologyKey: kubernetes.io/hostname
       containers:
       - name: {{ template "ll.fullname" . }}-xapi-pod
         envFrom:

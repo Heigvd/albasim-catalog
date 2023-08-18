@@ -13,11 +13,11 @@ spec:
   failedJobsHistoryLimit: 1
   concurrencyPolicy: Forbid
   suspend: {{ .Values.backup.suspend }}
-  schedule: "30 23 * * *"
+  schedule: "0 1 * * *"
   jobTemplate:
     spec:
       activeDeadlineSeconds: 3600
-      backoffLimit: 1
+      backoffLimit: 0
       template:
         spec:
           containers:
@@ -56,7 +56,7 @@ spec:
                     key: rclone_endpoint
               - name: RCLONE_CONFIG_BACKUP_ACL
                 value: private
-              - name: MONGO_DB
+              - name: MONGO_DBS
                 value: learninglocker_v2
               - name: MONGO_HOST
                 value: {{ template "ll.fullname" . }}-mongo-service
@@ -66,11 +66,11 @@ spec:
                     key: backup_encryption_password
                     name: {{ template "ll.fullname" . }}-backup-secret
                     optional: false
-              image: 'ghcr.io/heigvd/backup-cronjob-mongo34:1.0.0'
+              image: 'ghcr.io/heigvd/backup-cronjob-mongo34:1.0.1'
               name: backup-cronjob
               imagePullPolicy: Always
               command: ["/run_backup_mongo.sh"]
-          restartPolicy: OnFailure
+          restartPolicy: Never
           imagePullSecrets:
             - name: ghcr-pull-secret
   {{ end }}
