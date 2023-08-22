@@ -13,11 +13,11 @@ spec:
   failedJobsHistoryLimit: 1
   concurrencyPolicy: Forbid
   suspend: {{ .Values.backup.suspend }}
-  schedule: "30 23 * * *"
+  schedule: "0 1 * * *"
   jobTemplate:
     spec:
       activeDeadlineSeconds: 3600
-      backoffLimit: 1
+      backoffLimit: 0
       template:
         spec:
           containers:
@@ -91,7 +91,7 @@ spec:
               image: 'ghcr.io/heigvd/backup-cronjob:1.0.2'
               name: backup-cronjob
               imagePullPolicy: Always
-              command: ["bash", "-c", "/run_backup_psql.sh;/run_backup_mongo.sh"]
+              command: ["bash", "-c", "/run_backup_psql.sh && /run_backup_mongo.sh"]
               securityContext:
                 allowPrivilegeEscalation: false
                 privileged: false
@@ -102,7 +102,7 @@ spec:
                     - ALL
                 seccompProfile:
                   type: RuntimeDefault
-          restartPolicy: OnFailure
+          restartPolicy: Never
           imagePullSecrets:
             - name: ghcr-pull-secret
   {{ end }}

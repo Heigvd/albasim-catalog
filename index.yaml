@@ -59,8 +59,8 @@ entries:
   learning-locker:
   - apiVersion: v2
     appVersion: 1.0.0
-    created: "2023-08-18T10:51:16.691287824+02:00"
-    digest: 491ea6378015a170e490d0e0ecf312bc1d62e89b4f6a411070141e6e3d0ad02b
+    created: "2023-08-22T14:10:48.411085571+02:00"
+    digest: ea6b43611b3b6f24be1ea477865217b0757f1446af277735aebc315370b2c04c
     name: learning-locker
     type: application
     urls:
@@ -69,9 +69,9 @@ entries:
   wegas:
   - apiVersion: v2
     appVersion: 1.0.0
-    created: "2023-08-15T11:53:17.051817838+02:00"
+    created: "2023-08-22T14:10:48.414869567+02:00"
     description: The Web Game Authoring System
-    digest: e2900d451b86ad9f8590ee31d0f18773962af46bdbde262ac0c0ca8da77c8608
+    digest: d06c585330346aca6034b3f022143a709cdaf286d20931b280b848fa47b2599b
     icon: https://raw.githubusercontent.com/Heigvd/Wegas/master/wegas-app/src/main/webapp/wegas-app/images/logo_wegas_130.png
     name: wegas
     type: application
@@ -167,4 +167,4 @@ entries:
     urls:
     - wegas-war-manager-0.1.0.tgz
     version: 0.1.0
-generated: "2023-08-18T10:51:16.687829222+02:00"
+generated: "2023-08-22T14:10:48.398699124+02:00"
