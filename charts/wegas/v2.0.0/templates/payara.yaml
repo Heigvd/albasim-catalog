@@ -30,7 +30,7 @@ spec:
         externalUrl: {{ .Values.ingress.hostname }}
       annotations:
         checksum/config: {{ include (print $.Template.BasePath "/configmap.yaml") . | sha256sum }}
-        rollme: {{ .Values.wegas.rollme | quote }}
+        rollme: {{ randAlphaNum 5 | quote }}
     spec:
       affinity:
         podAffinity:

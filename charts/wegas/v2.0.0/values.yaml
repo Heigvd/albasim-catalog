@@ -3,7 +3,6 @@ ingress:
   hostname: null
 wegas:
   replicas: 1
-  rollme: 0 #{{ randAlphaNum 5 }}
   payaratag: latest
   java_heap: '1500'
   cpuRequest: 500m
