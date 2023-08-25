@@ -1,0 +1,26 @@
+ingress:
+  enabled: false
+  hostname: null
+wegas:
+  replicas: 1
+  payaratag: latest
+  type: 'branch'
+  name: 'master'
+  java_heap: '1500'
+  nbpopulators: 3
+  nbthreads: 9
+  warsClaim: ""
+  docker:
+    image: 'ghcr.io/heigvd/wegas'
+    tag: latest
+db:
+  name: wegas_dev
+  user: user
+  password: null
+  useExistingClaim: false
+  existingClaim: ""
+  size: 10Gi
+mongo:
+  useExistingClaim: false
+  existingClaim: ""
+  size: 10Gi
