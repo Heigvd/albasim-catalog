@@ -1,0 +1,98 @@
+{{- if .Values.backup.enabled -}}
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: {{ template "colab.fullname" . }}-backup-cronjob
+  labels:
+    app: {{ template "colab.fullname" . }}-backup-cronjob
+    chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+spec:
+  successfulJobsHistoryLimit: 3
+  failedJobsHistoryLimit: 1
+  concurrencyPolicy: Forbid
+  suspend: {{ .Values.backup.suspend }}
+  schedule: "30 23 * * *"
+  jobTemplate:
+    spec:
+      activeDeadlineSeconds: 3600
+      backoffLimit: 0
+      template:
+        spec:
+          containers:
+            - env:
+              - name: RCLONE_CONFIG_BACKUP_ACCESS_KEY_ID
+                valueFrom:
+                  secretKeyRef:
+                    key: S3_backup_key
+                    name: {{ template "colab.fullname" . }}-backup-secret
+              - name: RCLONE_CONFIG_BACKUP_SECRET_ACCESS_KEY
+                valueFrom:
+                  secretKeyRef:
+                    key: S3_backup_secret
+                    name: {{ template "colab.fullname" . }}-backup-secret
+              - name: ALBASIM_APP_BACKUP_BUCKET
+                valueFrom:
+                  configMapKeyRef:
+                    name: {{ template "colab.fullname" . }}-backup-configmap
+                    key: backup_bucket
+              - name: RCLONE_CONFIG_BACKUP_TYPE
+                valueFrom:
+                  configMapKeyRef:
+                    name: {{ template "colab.fullname" . }}-backup-configmap
+                    key: rclone_type
+              - name: RCLONE_CONFIG_BACKUP_ENV_AUTH
+                value: "false"
+              - name: RCLONE_CONFIG_BACKUP_PROVIDER
+                valueFrom:
+                  configMapKeyRef:
+                    name: {{ template "colab.fullname" . }}-backup-configmap
+                    key: rclone_provider
+              - name: RCLONE_CONFIG_BACKUP_ENDPOINT
+                valueFrom:
+                  configMapKeyRef:
+                    name: {{ template "colab.fullname" . }}-backup-configmap
+                    key: rclone_endpoint
+              - name: RCLONE_CONFIG_BACKUP_ACL
+                value: private
+              - name: PGHOST
+                value: {{ template "colab.fullname" . }}-psql
+              - name: PGPORT
+                value: "5432"
+              - name: PGDATABASE
+                valueFrom:
+                  configMapKeyRef:
+                    key: COLAB_DATABASE_NAME
+                    name: {{ template "colab.fullname" . }}-hard-config
+                    optional: false
+              - name: PGUSER
+                valueFrom:
+                  configMapKeyRef:
+                    key: COLAB_DATABASE_USER
+                    name: {{ template "colab.fullname" . }}-hard-config
+                    optional: false
+              - name: PGPASSWORD
+                valueFrom:
+                  secretKeyRef:
+                    key: COLAB_DATABASE_PASSWORD
+                    name: {{ template "colab.fullname" . }}-secret
+                    optional: false
+              - name: MONGO_DBS
+                value: colablexical oak
+              - name: MONGO_HOST
+                value: {{ template "colab.fullname" . }}-mongo
+              - name: ALBASIM_APP_BACKUP_ENCRYPTION_PASSWORD
+                valueFrom:
+                  secretKeyRef:
+                    key: backup_encryption_password
+                    name: {{ template "colab.fullname" . }}-backup-secret
+                    optional: false
+              image: 'ghcr.io/heigvd/backup-cronjob:1.0.2'
+              name: backup-cronjob
+              imagePullPolicy: Always
+              command: ["bash", "-c", "/run_backup_psql.sh && /run_backup_mongo.sh"]
+          restartPolicy: Never
+          imagePullSecrets:
+            - name: ghcr-pull-secret
+  {{ end }}
