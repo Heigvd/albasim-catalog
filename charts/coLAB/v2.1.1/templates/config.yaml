@@ -13,7 +13,7 @@ data:
     colab.jcr.maxfile.size.mo={{ .Values.colab.jcr.maxfile_size_mo }}
     colab.jcr.project.quota.mo={{ .Values.colab.jcr.quota_mo }}
     colab.yjs.url=wss://{{ .Values.ingress.hostname }}/yjs
-    colab.yjs.internalhostname={{ template "colab.fullname" . }}-yjs
+    colab.yjs.internalurl=http://{{ template "colab.fullname" . }}-yjs:4321
 {{ .Values.colab.extraproperties | indent 4 }}
 metadata:
   name: {{ template "colab.fullname" . }}-user-config
