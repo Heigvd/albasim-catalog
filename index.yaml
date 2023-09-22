@@ -3,7 +3,7 @@ entries:
   aai:
   - apiVersion: v2
     appVersion: 1.0.0
-    created: "2023-09-22T14:19:36.202967+02:00"
+    created: "2023-09-22T14:33:09.863758+02:00"
     description: Switch AAI Authentication
     digest: 587027a21314f8f947a55eee231b21a1e2bbe65dc06a5997d64a82c8cba3296b
     name: aai
@@ -14,7 +14,18 @@ entries:
   colab:
   - apiVersion: v2
     appVersion: 1.0.0
-    created: "2023-09-22T14:19:36.205151+02:00"
+    created: "2023-09-22T14:33:09.866481+02:00"
+    description: The co.LAB platform
+    digest: e70b604a4d3b8fd363c11616853247dbce46fada2db8fa65ee8c533e5cd27772
+    icon: https://raw.githubusercontent.com/Heigvd/colab/main/colab-webapp/src/main/node/app/public/favicon_128.png
+    name: colab
+    type: application
+    urls:
+    - colab-2.1.1.tgz
+    version: 2.1.1
+  - apiVersion: v2
+    appVersion: 1.0.0
+    created: "2023-09-22T14:33:09.866171+02:00"
     description: The co.LAB platform
     digest: 713b5f64eb0b54a1c807052ff83cfe75c447f986178f37813ee82ee849f216eb
     icon: https://raw.githubusercontent.com/Heigvd/colab/main/colab-webapp/src/main/node/app/public/favicon_128.png
@@ -25,7 +36,7 @@ entries:
     version: 2.1.0
   - apiVersion: v2
     appVersion: 1.0.0
-    created: "2023-09-22T14:19:36.204858+02:00"
+    created: "2023-09-22T14:33:09.865669+02:00"
     description: The co.LAB platform
     digest: b31f6105408acd9c4854ea5e12cec27e7657a7049ba9be53f6cd2e587d1fa42b
     icon: https://raw.githubusercontent.com/Heigvd/colab/main/colab-webapp/src/main/node/app/public/favicon_128.png
@@ -36,7 +47,7 @@ entries:
     version: 2.0.0
   - apiVersion: v2
     appVersion: 1.0.0
-    created: "2023-09-22T14:19:36.204402+02:00"
+    created: "2023-09-22T14:33:09.865185+02:00"
     description: The co.LAB platform
     digest: 62ebc53c9668c2fdaa15a9fe7d534b86b7131894223b72b4f6b97ff0cf680859
     icon: https://raw.githubusercontent.com/Heigvd/colab/main/colab-webapp/src/main/node/app/public/favicon_128.png
@@ -47,7 +58,7 @@ entries:
     version: 1.1.0
   - apiVersion: v2
     appVersion: 1.0.0
-    created: "2023-09-22T14:19:36.203978+02:00"
+    created: "2023-09-22T14:33:09.864717+02:00"
     description: The co.LAB platform
     digest: fbb2a312a78f24d7dae2095992aea97b3f11d2a3fe2b2bb28980a87eb8475d35
     icon: https://raw.githubusercontent.com/Heigvd/colab/main/colab-webapp/src/main/node/app/public/favicon_128.png
@@ -58,7 +69,7 @@ entries:
     version: 1.0.1
   - apiVersion: v2
     appVersion: 1.0.0
-    created: "2023-09-22T14:19:36.203484+02:00"
+    created: "2023-09-22T14:33:09.864224+02:00"
     description: The co.LAB platform
     digest: f20b2b5cc0d6f55b9dc550b3395f21e7c2d662aca5e2d62aabd750b44c5d50cc
     icon: https://raw.githubusercontent.com/Heigvd/colab/main/colab-webapp/src/main/node/app/public/favicon_128.png
@@ -70,7 +81,7 @@ entries:
   learning-locker:
   - apiVersion: v2
     appVersion: 1.0.0
-    created: "2023-09-22T14:19:36.205643+02:00"
+    created: "2023-09-22T14:33:09.866903+02:00"
     digest: ea6b43611b3b6f24be1ea477865217b0757f1446af277735aebc315370b2c04c
     name: learning-locker
     type: application
@@ -80,7 +91,7 @@ entries:
   wegas:
   - apiVersion: v2
     appVersion: 1.0.0
-    created: "2023-09-22T14:19:36.207725+02:00"
+    created: "2023-09-22T14:33:09.869233+02:00"
     description: The Web Game Authoring System
     digest: b37aeca74ea3762bafc9f8485283ec5c3fa68d6c977ba2ed5d65fa807136b332
     icon: https://raw.githubusercontent.com/Heigvd/Wegas/master/wegas-app/src/main/webapp/wegas-app/images/logo_wegas_130.png
@@ -91,7 +102,7 @@ entries:
     version: 2.0.0
   - apiVersion: v2
     appVersion: 1.0.0
-    created: "2023-09-22T14:19:36.207332+02:00"
+    created: "2023-09-22T14:33:09.868795+02:00"
     description: The Web Game Authoring System
     digest: 1ef1d0bf08f0d4a6642b13fc7d4371b89592faeb32d71b70cc0e605567a599b8
     icon: https://raw.githubusercontent.com/Heigvd/Wegas/master/wegas-app/src/main/webapp/wegas-app/images/logo_wegas_130.png
@@ -102,7 +113,7 @@ entries:
     version: 1.1.0
   - apiVersion: v2
     appVersion: 1.0.0
-    created: "2023-09-22T14:19:36.207093+02:00"
+    created: "2023-09-22T14:33:09.868534+02:00"
     description: The Web Game Authoring System
     digest: 95352b528780d7e1871aef8c17732668dbc77f9c90f4ed35a193c2cc95ac28e2
     icon: https://raw.githubusercontent.com/Heigvd/Wegas/master/wegas-app/src/main/webapp/wegas-app/images/logo_wegas_130.png
@@ -113,7 +124,7 @@ entries:
     version: 1.0.2
   - apiVersion: v2
     appVersion: 1.0.0
-    created: "2023-09-22T14:19:36.206838+02:00"
+    created: "2023-09-22T14:33:09.868255+02:00"
     description: The Web Game Authoring System
     digest: b415b759117ff8acddf44da1078afc1c0ad4878644cc2e44926d157e2a82b679
     icon: https://raw.githubusercontent.com/Heigvd/Wegas/master/wegas-app/src/main/webapp/wegas-app/images/logo_wegas_130.png
@@ -124,7 +135,7 @@ entries:
     version: 1.0.1
   - apiVersion: v2
     appVersion: 1.0.0
-    created: "2023-09-22T14:19:36.206565+02:00"
+    created: "2023-09-22T14:33:09.867938+02:00"
     description: The Web Game Authoring System
     digest: 16df51c6789a669ca91857f6d3c3d3f4baabf32c7d19e514a7e1cd87b56b68e4
     icon: https://raw.githubusercontent.com/Heigvd/Wegas/master/wegas-app/src/main/webapp/wegas-app/images/logo_wegas_130.png
@@ -135,7 +146,7 @@ entries:
     version: 1.0.0
   - apiVersion: v2
     appVersion: 1.0.0
-    created: "2023-09-22T14:19:36.206195+02:00"
+    created: "2023-09-22T14:33:09.867462+02:00"
     description: The Web Game Authoring System
     digest: d9d9f6df5f283d3d1e1d7b6177e612964e33a8ad095dc0468799b1197872b3e4
     icon: https://raw.githubusercontent.com/Heigvd/Wegas/master/wegas-app/src/main/webapp/wegas-app/images/logo_wegas_130.png
@@ -146,7 +157,7 @@ entries:
     version: 0.2.0
   - apiVersion: v2
     appVersion: 1.0.0
-    created: "2023-09-22T14:19:36.205928+02:00"
+    created: "2023-09-22T14:33:09.867198+02:00"
     description: The Web Game Authoring System
     digest: c0a9bc9d0333bd5d17fc5dfb0cf8d6e0c3f54650e6fc0ea536d981356f893aa6
     icon: https://raw.githubusercontent.com/Heigvd/Wegas/master/wegas-app/src/main/webapp/wegas-app/images/logo_wegas_130.png
@@ -158,7 +169,7 @@ entries:
   wegas-war-manager:
   - apiVersion: v2
     appVersion: 1.1.0
-    created: "2023-09-22T14:19:36.208225+02:00"
+    created: "2023-09-22T14:33:09.869696+02:00"
     description: Wegas War Manager Rancher Chart
     digest: c53fa807f6a092a3e4ead2ff560a5f747a0029236cf797ca7de7cff1bd9dff12
     icon: https://raw.githubusercontent.com/Heigvd/Wegas/master/wegas-app/src/main/webapp/favicon_pink.png
@@ -169,7 +180,7 @@ entries:
     version: 0.2.0
   - apiVersion: v2
     appVersion: 1.0.0
-    created: "2023-09-22T14:19:36.207981+02:00"
+    created: "2023-09-22T14:33:09.869465+02:00"
     description: Wegas War Manager Rancher Chart
     digest: 5f5e0f4f754263eab30bd21eb64f1757f8a60d527759494b342ab9d03dfc8b74
     icon: https://raw.githubusercontent.com/Heigvd/Wegas/master/wegas-app/src/main/webapp/favicon_pink.png
@@ -178,4 +189,4 @@ entries:
     urls:
     - wegas-war-manager-0.1.0.tgz
     version: 0.1.0
-generated: "2023-09-22T14:19:36.202489+02:00"
+generated: "2023-09-22T14:33:09.863311+02:00"
