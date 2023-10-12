@@ -1,0 +1,44 @@
+{{- if .Values.ingress.enabled -}}
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: {{ template "wegas.fullname" . }}
+  labels:
+    app: {{ template "wegas.fullname" . }}
+    chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+  annotations:
+    nginx.ingress.kubernetes.io/proxy-body-size: 100m
+    cert-manager.io/cluster-issuer: "letsencrypt-prod"
+    nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"
+    nginx.ingress.kubernetes.io/configuration-snippet: |
+      limit_req zone=rate_limit_per_server burst=100 nodelay;
+      limit_req_status 429;
+      gzip off;
+      gzip_types application/javascript application/x-javascript font/opentype image/svg+xml image/x-icon text/css text/javascript image/png image/x-icon;
+      if ($request_uri ~* \.(js|css|gif|jpe?g|png|ico)) {
+        gzip on;
+        expires 1h;
+        add_header Cache-Control "private";
+      }
+    #  limit_conn wegasrestconn_upstream 9;
+    #  limit_conn_status 429;
+spec:
+  tls:
+  - hosts:
+    - {{ .Values.ingress.hostname }}
+    secretName: {{ .Values.ingress.hostname }}-tls
+  ingressClassName: nginx
+  rules:
+  - host: {{ .Values.ingress.hostname }}
+    http:
+      paths:
+      - path: "/"
+        pathType: Prefix
+        backend:
+          service:
+            port:
+              number: 8443
+            name: {{ template "wegas.fullname" . }}
+{{- end -}}
