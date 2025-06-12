@@ -2,7 +2,7 @@
 {{- /*
  Interal service resolver:
   - setting ClusterIp to None to resolve to all internal POD ip address
-  - used by pods to cluster together (clustermode = dns:...-internal-service) 
+  - used by pods to cluster together (clustermode = dns:...-internal-service)
 */}}
 apiVersion: v1
 kind: Service
@@ -53,8 +53,24 @@ spec:
     app: {{ template "colab.fullname" . }}-payara
     release: {{ .Release.Name }}
 ---
+# Not strictly necessary, but ensures internal DNS resolution works in statefulset
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ template "colab.fullname" . }}-payara
+  labels:
+    app: {{ template "colab.fullname" . }}-payara
+spec:
+  clusterIP: None
+  selector:
+    app: {{ template "colab.fullname" . }}-payara
+  ports:
+    - name: http
+      port: 8080
+      targetPort: 8080
+---
 apiVersion: apps/v1
-kind: Deployment
+kind: StatefulSet
 metadata:
   name: {{ template "colab.fullname" . }}-payara
   labels:
@@ -63,17 +79,14 @@ metadata:
     release: {{ .Release.Name }}
     heritage: {{ .Release.Service }}
 spec:
-  progressDeadlineSeconds: 600
+  serviceName: {{ template "colab.fullname" . }}-payara
   replicas: {{ .Values.colab.replicas }}
   revisionHistoryLimit: 10
   selector:
     matchLabels:
       app: {{ template "colab.fullname" . }}-payara
       release: {{ .Release.Name }}
-  strategy:
-    rollingUpdate:
-      maxSurge: 0
-      maxUnavailable: 1
+  updateStrategy:
     type: RollingUpdate
   template:
     metadata:

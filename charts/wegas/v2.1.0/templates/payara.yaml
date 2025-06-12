@@ -1,25 +1,38 @@
-apiVersion: apps/v1
-kind: Deployment
+# Not strictly necessary, but ensures internal DNS resolution works in statefulset
+apiVersion: v1
+kind: Service
 metadata:
   name: {{ template "wegas.fullname" . }}-payara
-  generation: 1
+  labels:
+    app: {{ template "wegas.fullname" . }}-payara
+spec:
+  clusterIP: None
+  selector:
+    app: {{ template "wegas.fullname" . }}-payara
+  ports:
+    - name: http
+      port: 8080
+      targetPort: 8080
+---
+
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: {{ template "wegas.fullname" . }}-payara
   labels:
     app: {{ template "wegas.fullname" . }}-payara
     chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
     release: {{ .Release.Name }}
     heritage: {{ .Release.Service }}
 spec:
-  progressDeadlineSeconds: 600
+  serviceName: {{ template "wegas.fullname" . }}-payara
   replicas: {{ .Values.wegas.replicas }}
   revisionHistoryLimit: 10
   selector:
     matchLabels:
       app: {{ template "wegas.fullname" . }}-payara
       release: {{ .Release.Name }}
-  strategy:
-    rollingUpdate:
-      maxSurge: 0
-      maxUnavailable: 1
+  updateStrategy:
     type: RollingUpdate
   template:
     metadata:
@@ -162,6 +175,6 @@ spec:
               name: wegas-config-file
       volumes:
         - name: wegas-config-file
-          configMap: 
+          configMap:
             name: {{ template "wegas.fullname" . }}-config
             defaultMode: 420
