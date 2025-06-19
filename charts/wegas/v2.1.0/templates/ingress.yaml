@@ -15,13 +15,6 @@ metadata:
     nginx.ingress.kubernetes.io/configuration-snippet: |
       limit_req zone=rate_limit_per_server burst=100 nodelay;
       limit_req_status 429;
-      gzip off;
-      gzip_types application/javascript application/x-javascript font/opentype image/svg+xml image/x-icon text/css text/javascript image/png image/x-icon;
-      if ($request_uri ~* \.(js|css|gif|jpe?g|png|ico)) {
-        gzip on;
-        expires 1h;
-        add_header Cache-Control "private";
-      }
     #  limit_conn wegasrestconn_upstream 9;
     #  limit_conn_status 429;
 spec:
