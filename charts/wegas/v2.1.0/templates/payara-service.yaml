@@ -1,8 +1,9 @@
 {{- /*
-    Interal service resolver:
-      - setting ClusterIp to None to resolve to all internal POD ip address
-      - used by pods to cluster together (clustermode = dns:...-internal-service)
-  */}}
+ Internal service resolver:
+  - setting ClusterIp to None to resolve to all internal POD ip address
+  - used by pods to cluster together (clustermode = dns:...-internal-service)
+  - also used for statefulset
+*/}}
 apiVersion: v1
 kind: Service
 metadata:

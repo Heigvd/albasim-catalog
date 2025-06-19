@@ -1,20 +1,3 @@
-# Not strictly necessary, but ensures internal DNS resolution works in statefulset
-apiVersion: v1
-kind: Service
-metadata:
-  name: {{ template "wegas.fullname" . }}-payara
-  labels:
-    app: {{ template "wegas.fullname" . }}-payara
-spec:
-  clusterIP: None
-  selector:
-    app: {{ template "wegas.fullname" . }}-payara
-  ports:
-    - name: http
-      port: 8080
-      targetPort: 8080
----
-
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
@@ -25,7 +8,7 @@ metadata:
     release: {{ .Release.Name }}
     heritage: {{ .Release.Service }}
 spec:
-  serviceName: {{ template "wegas.fullname" . }}-payara
+  serviceName: {{ template "wegas.fullname" . }}
   replicas: {{ .Values.wegas.replicas }}
   revisionHistoryLimit: 10
   selector:
