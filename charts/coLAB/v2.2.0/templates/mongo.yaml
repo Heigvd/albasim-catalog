@@ -15,7 +15,7 @@ spec:
   resources:
     requests:
       storage: {{ .Values.mongo.size | quote }}
-  storageClassName: ceph-ssd-retain
+  storageClassName: switch-cloud-performance-retain
 ---
 {{- end -}}
 apiVersion: v1
