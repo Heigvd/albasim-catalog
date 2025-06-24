@@ -1,0 +1,32 @@
+apiVersion: v1
+kind: ConfigMap
+data:
+  UI_PORT: "3000"
+  API_HOST: {{ template "ll.fullname" . }}-api-service
+  API_PORT: "8080"
+  EXPRESS_PORT: "8081"
+  APP_SECRET: {{ .Values.app_secret | quote }}
+  MONGODB_PATH: mongodb://{{- template "ll.fullname" . -}}-mongo-service:27017/learninglocker_v2
+  MONGO_URL: mongodb://{{- template "ll.fullname" . -}}-mongo-service:27017/learninglocker_v2
+  REDIS_HOST: {{ template "ll.fullname" . -}}-redis-service
+  REDIS_PORT: "6379"
+  REDIS_PREFIX: LEARNINGLOCKER
+  REDIS_URL: redis://{{- template "ll.fullname" . -}}-redis-service:6379/0
+  SMTP_HOST: {{ .Values.smtp.host }}
+  SMTP_USER: {{ .Values.smtp.user }}
+  SMTP_PASS: {{ .Values.smtp.password }}
+  SMTP_PORT: {{ .Values.smtp.port | quote }}
+  SMTP_SECURED: {{ .Values.smtp.secured | quote }}
+  SMTP_IGNORE_TLS: {{ .Values.smtp.ignore_tls | quote }}
+  SMTP_REQUIRE_TLS: {{ .Values.smtp.require_tls | quote }}
+  LL_FROM_NAME: Learning Locker
+  LL_FROM_EMAIL: {{ .Values.smtp.from }}
+
+metadata:
+  name: {{ template "ll.fullname" . }}-config
+  labels:
+    app: {{ template "ll.fullname" . }}-config
+    chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+
