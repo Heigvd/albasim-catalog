@@ -1,0 +1,121 @@
+questions:
+- variable: wegas.docker.image
+  group: 'Deployement'
+  label: "Docker image"
+  default: 'ghcr.io/heigvd/wegas-next'
+  type: string
+  required: true
+- variable: wegas.docker.tag
+  group: 'Deployement'
+  label: "Image tag"
+  default: latest
+  type: string
+  required: true
+- variable: ingress.enabled
+  group: 'Deployement'
+  default: true
+  type: boolean
+  label: Expose app using Layer 7 Load Balancer
+  show_subquestion_if: true
+  group: "Services and Load Balancing"
+  subquestions:
+  - variable: ingress.hostname
+    default: ""
+    description: "example.albasim.ch"
+    type: hostname
+    required: true
+    label: Hostname
+- variable: wegas.replicas
+  group: "Runtime"
+  label: "Number of replicas"
+  default: 1
+  type: int
+  required: true
+- variable: wegas.java_heap
+  group: "Runtime"
+  label: Java Heap Size (MB)
+  type: string
+  default: 1500
+  required: true
+- variable: wegas.nbthreads
+  group: "Runtime"
+  label: Number of threads
+  type: int
+  default: 9
+  required: true
+- variable: wegas.nbpopulators
+  group: "Runtime"
+  label: Number of populator deamon
+  type: int
+  default: 3
+  required: true
+
+- variable: db.name
+  group: "SQL Database"
+  label: db name
+  type: string
+  default: "wegas_dev"
+  required: true
+- variable: db.user
+  group: "SQL Database"
+  label: user
+  type: string
+  default: "user"
+  required: true
+- variable: db.password
+  group: "SQL Database"
+  label: Password
+  default: ""
+  required: true
+  type: 'password'
+
+- variable: db.useExistingClaim
+  group: "SQL Persistence"
+  label: "Use existing claim ?"
+  type: boolean
+  default: false
+- variable: db.existingClaim
+  show_if: "db.useExistingClaim=true"
+  group: "SQL Persistence"
+  default: ""
+  description: "If not empty, uses the specified existing PVC instead of creating new one"
+  type: pvc
+  label: Uses Existing Persistent Volume Claim
+  required: true
+- variable: db.size
+  group: "SQL Persistence"
+  label: "Volume Size"
+  show_if: "db.useExistingClaim=false"
+  default: "10Gi"
+  type: string
+  required: true
+
+- variable: mongo.useExistingClaim
+  group: "MONGO Persistence"
+  label: "Use existing claim ?"
+  type: boolean
+  default: false
+- variable: mongo.existingClaim
+  show_if: "mongo.useExistingClaim=true"
+  group: "MONGO Persistence"
+  default: ""
+  description: "If not empty, uses the specified existing PVC instead of creating new one"
+  type: pvc
+  label: Uses Existing Persistent Volume Claim
+  required: true
+- variable: mongo.size
+  group: "MONGO Persistence"
+  label: "Volume Size"
+  show_if: "mongo.useExistingClaim=false"
+  default: "10Gi"
+  type: string
+  required: true
+
+- variable: wegas.wegas_properties
+  group: "Wegas Properties"
+  label: "Custom wegas properties"
+  description: "The ones you would set in the wegas.properties file"
+  type: multiline
+  default: ""
+  required: true
+
