@@ -1,0 +1,84 @@
+ingress:
+  enabled: false
+  hostname: null
+wegas:
+  replicas: 1
+  payaratag: latest
+  java_heap: '1500'
+  cpuRequest: 500m
+  cpuLimit: 1800m
+  memLimit: 3800Mi
+  nbpopulators: 3
+  nbthreads: 9
+  docker:
+    image: 'ghcr.io/heigvd/wegas-next'
+    tag: latest
+  wegas_properties: |
+    favicon=favicon_black
+    pusher.appId=
+    pusher.key=
+    pusher.secret=
+    pusher.cluster=eu
+    pusher.onlineusers_hook=true
+    #
+    # SMTP
+    #######
+    mail.default_domain=
+    mail.smtp.starttls.enable=true
+    mail.smtp.host=
+    mail.smtp.username=
+    mail.smtp.password=
+    mail.smtp.auth=true
+    mail.smtp.port=587
+    
+    # DeepL PRO API
+    ###########################################3
+    deepl.service_url=
+    deepl.auth_key=
+    deepl.enabled=false
+
+    #######
+    # AAI / EduID
+    ##############
+    aai.secret=
+    aai.enabled=false
+    aai.showbutton=false
+    aai.loginurl=
+    eduid.enabled=false
+    eduid.url=
+
+    # Shiro
+    #######
+    shiro.secureFlag=true
+    shiro.cipherKey=
+
+    ## xAPI ##
+    ##########
+    xapi.ll.host=
+    xapi.host=
+    xapi.agent.homepage=
+    xapi.log_debug_player=false
+    xapi.auth=
+db:
+  name: wegas_dev
+  user: user
+  password: "1234"
+  useExistingClaim: false
+  existingClaim: ""
+  size: 10Gi
+mongo:
+  useExistingClaim: false
+  existingClaim: ""
+  size: 10Gi
+backup:
+  enabled: false
+  suspend: false
+  pull_secret:
+  s3:
+    key:
+    secret:
+    bucket:
+    rclone_type:
+    rclone_provider:
+    rclone_endpoint:
+    backup_encryption_password:
