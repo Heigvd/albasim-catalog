@@ -1,16 +1,5 @@
 apiVersion: v1
 entries:
-  aai:
-  - apiVersion: v2
-    appVersion: 1.0.0
-    created: "2023-09-22T14:33:09.863758+02:00"
-    description: Switch AAI Authentication
-    digest: 587027a21314f8f947a55eee231b21a1e2bbe65dc06a5997d64a82c8cba3296b
-    name: aai
-    type: application
-    urls:
-    - aai-0.0.1.tgz
-    version: 0.0.1
   colab:
   - apiVersion: v2
     appVersion: 1.0.0
@@ -89,6 +78,17 @@ entries:
     - learning-locker-1.0.0.tgz
     version: 1.0.0
   wegas:
+  - apiVersion: v2
+    appVersion: 1.0.0
+    created: "2026-03-11T17:59:09.255393+01:00"
+    description: The Web Game Authoring System
+    digest: 8734cab501690abdf91b5195580e27543fe43b1572223b181d93a8e849274350
+    icon: https://raw.githubusercontent.com/Heigvd/Wegas/master/wegas-app/src/main/webapp/wegas-app/images/logo_wegas_130.png
+    name: wegas
+    type: application
+    urls:
+    - wegas-2.0.3.tgz
+    version: 2.0.3
   - apiVersion: v2
     appVersion: 1.0.0
     created: "2023-10-12T10:48:17.199980979+02:00"
@@ -189,4 +189,4 @@ entries:
     urls:
     - wegas-war-manager-0.1.0.tgz
     version: 0.1.0
-generated: "2023-10-12T10:48:17.194453796+02:00"
+generated: "2026-03-11T17:59:09.246905+01:00"

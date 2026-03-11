@@ -1,0 +1,54 @@
+{{- /*
+    Interal service resolver:
+      - setting ClusterIp to None to resolve to all internal POD ip address
+      - used by pods to cluster together (clustermode = dns:...-internal-service)
+  */}}
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ template "wegas.fullname" . }}-internal
+  labels:
+    app: {{ template "wegas.fullname" . }}
+    chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+spec:
+  type: ClusterIP
+  clusterIP: None
+  ports:
+    - port: 8443
+      protocol: TCP
+      name: https
+      targetPort: 8443
+    - port: 8080
+      protocol: TCP
+      name: http
+      targetPort: 8080
+  selector:
+    app: {{ template "wegas.fullname" . }}-payara
+    release: {{ .Release.Name }}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ template "wegas.fullname" . }}
+  labels:
+    app: {{ template "wegas.fullname" . }}
+    chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+spec:
+  type: ClusterIP
+  ports:
+    - port: 8443
+      protocol: TCP
+      name: https
+      targetPort: 8443
+    - port: 8080
+      protocol: TCP
+      name: http
+      targetPort: 8080
+  selector:
+    app: {{ template "wegas.fullname" . }}-payara
+    release: {{ .Release.Name }}
+
