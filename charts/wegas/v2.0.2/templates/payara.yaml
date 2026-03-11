@@ -1,0 +1,167 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ template "wegas.fullname" . }}-payara
+  generation: 1
+  labels:
+    app: {{ template "wegas.fullname" . }}-payara
+    chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+spec:
+  progressDeadlineSeconds: 600
+  replicas: {{ .Values.wegas.replicas }}
+  revisionHistoryLimit: 10
+  selector:
+    matchLabels:
+      app: {{ template "wegas.fullname" . }}-payara
+      release: {{ .Release.Name }}
+  strategy:
+    rollingUpdate:
+      maxSurge: 0
+      maxUnavailable: 1
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        app: {{ template "wegas.fullname" . }}-payara
+        chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
+        release: {{ .Release.Name }}
+        externalUrl: {{ .Values.ingress.hostname }}
+      annotations:
+        checksum/config: {{ include (print $.Template.BasePath "/configmap.yaml") . | sha256sum }}
+        rollme: {{ randAlphaNum 5 | quote }}
+    spec:
+      affinity:
+        podAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+            - weight: 100
+              podAffinityTerm:
+                labelSelector:
+                  matchExpressions:
+                  - key: app
+                    operator: In
+                    values:
+                    - {{ template "wegas.fullname" . }}-psql
+                topologyKey: kubernetes.io/hostname
+        nodeAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+            - weight: 10
+              preference:
+                matchExpressions:
+                  - key: {{ template "wegas.fullname" . }}
+                    operator: In
+                    values:
+                      - "true"
+      priorityClassName: low-priority-app
+      containers:
+        - name: {{ template "wegas.fullname" . }}-payara
+          image: {{ .Values.wegas.docker.image -}}{{- if .Values.wegas.docker.tag -}} : {{- .Values.wegas.docker.tag -}}  {{- end }}
+          imagePullPolicy: Always
+          startupProbe:
+            failureThreshold: 120
+            httpGet:
+              path: /
+              port: 8080
+              scheme: HTTP
+            initialDelaySeconds: 25
+            periodSeconds: 5
+            successThreshold: 1
+            timeoutSeconds: 1
+          livenessProbe:
+            failureThreshold: 3
+            httpGet:
+              path: /
+              port: 8080
+              scheme: HTTP
+            periodSeconds: 2
+            successThreshold: 1
+            timeoutSeconds: 2
+          readinessProbe:
+            failureThreshold: 1
+            httpGet:
+              path: /
+              port: 8080
+              scheme: HTTP
+            periodSeconds: 2
+            successThreshold: 2
+            timeoutSeconds: 2
+          resources:
+            requests:
+              memory: {{ div ( mul .Values.wegas.java_heap 180 ) 100 }}Mi
+              cpu: {{ .Values.wegas.cpuRequest }}
+            limits:
+              memory: {{ .Values.wegas.memLimit }}
+              cpu: {{ .Values.wegas.cpuLimit }}
+          env:
+            - name: INTERFACES
+              value: "172.25.*.*"
+            - name: CLUSTER_MODE
+              value: dns:{{ template "wegas.fullname" . }}-internal:6900
+            - name: SSL_PORT
+              value: "8443"
+            - name: HTTP_PORT
+              value: "8080"
+            - name: HZ_CLUSTER_NAME
+              value: {{ template "wegas.fullname" . }}-cluster
+            - name: HEAP
+              valueFrom:
+                configMapKeyRef:
+                  key: JAVA_HEAP
+                  name: {{ template "wegas.fullname" . }}-config
+                  optional: false
+            - name: DB_USER
+              valueFrom:
+                configMapKeyRef:
+                  key: DB_USER
+                  name: {{ template "wegas.fullname" . }}-config
+                  optional: false
+            - name: DB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  key: DB_PASSWORD
+                  name: {{ template "wegas.fullname" . }}-secret
+                  optional: false
+            - name: DB_HOST
+              value: {{ template "wegas.fullname" . }}-psql
+            - name: DB_PORT
+              value: "5432"
+            - name: MONGO_HOST
+              value: {{ template "wegas.fullname" . }}-mongo
+            - name: DB_NAME
+              valueFrom:
+                configMapKeyRef:
+                  key: DB_NAME
+                  name: {{ template "wegas.fullname" . }}-config
+                  optional: false
+            - name: NB_POPULATORS
+              valueFrom:
+                configMapKeyRef:
+                  key: NB_POPULATORS
+                  name: {{ template "wegas.fullname" . }}-config
+                  optional: false
+            - name: NB_THREADS
+              valueFrom:
+                configMapKeyRef:
+                  key: NB_THREADS
+                  name: {{ template "wegas.fullname" . }}-config
+                  optional: false
+          securityContext:
+            allowPrivilegeEscalation: false
+            privileged: false
+            readOnlyRootFilesystem: false
+            runAsNonRoot: true
+            runAsUser: 10110
+            capabilities:
+              drop:
+                - ALL
+            seccompProfile:
+              type: RuntimeDefault
+          volumeMounts:
+            - mountPath: /var/lib/wegas
+              name: wegas-config-file
+      volumes:
+        - name: wegas-config-file
+          configMap: 
+            name: {{ template "wegas.fullname" . }}-config
+            defaultMode: 420
