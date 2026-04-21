@@ -1,0 +1,20 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ template "wegas.fullname" . }}-psql
+  labels:
+    app: {{ template "wegas.fullname" . }}-psql
+    chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+spec:
+  type: ClusterIP
+  ports:
+    - port: 5432
+      protocol: TCP
+      name: {{ template "wegas.fullname" . }}-psql
+      targetPort: 5432
+  selector:
+    app: {{ template "wegas.fullname" . }}-psql
+    release: {{ .Release.Name }}
+
