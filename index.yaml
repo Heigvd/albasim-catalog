@@ -91,6 +91,17 @@ entries:
   wegas:
   - apiVersion: v2
     appVersion: 1.0.0
+    created: "2026-03-11T10:51:33.564957+01:00"
+    description: The Web Game Authoring System
+    digest: bf1d5c701ac0a47e051631730dae812ef0b021b13fd714ea3201c2ee155c63bd
+    icon: https://raw.githubusercontent.com/Heigvd/Wegas/master/wegas-app/src/main/webapp/wegas-app/images/logo_wegas_130.png
+    name: wegas
+    type: application
+    urls:
+    - wegas-2.0.2.tgz
+    version: 2.0.2
+  - apiVersion: v2
+    appVersion: 1.0.0
     created: "2023-10-12T10:48:17.199980979+02:00"
     description: The Web Game Authoring System
     digest: b37aeca74ea3762bafc9f8485283ec5c3fa68d6c977ba2ed5d65fa807136b332
@@ -189,4 +200,4 @@ entries:
     urls:
     - wegas-war-manager-0.1.0.tgz
     version: 0.1.0
-generated: "2023-10-12T10:48:17.194453796+02:00"
+generated: "2026-03-11T10:51:33.556701+01:00"
