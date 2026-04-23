@@ -1,0 +1,19 @@
+{{- if not .Values.mongo.useExistingClaim -}}
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: {{ template "wegas.fullname" . }}-mongo-pvc
+  labels:
+    app: {{ template "wegas.fullname" . }}
+    chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: {{ .Values.mongo.size | quote }}
+  storageClassName: ceph-ssd-retain
+{{- end -}}
+
