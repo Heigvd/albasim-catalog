@@ -67,16 +67,6 @@ entries:
     urls:
     - colab-1.0.0.tgz
     version: 1.0.0
-  learning-locker:
-  - apiVersion: v2
-    appVersion: 1.0.0
-    created: "2023-09-22T14:33:09.866903+02:00"
-    digest: ea6b43611b3b6f24be1ea477865217b0757f1446af277735aebc315370b2c04c
-    name: learning-locker
-    type: application
-    urls:
-    - learning-locker-1.0.0.tgz
-    version: 1.0.0
   wegas:
   - apiVersion: v2
     appVersion: 1.0.0
@@ -176,28 +166,5 @@ entries:
     type: application
     urls:
     - wegas-0.1.0.tgz
-    version: 0.1.0
-  wegas-war-manager:
-  - apiVersion: v2
-    appVersion: 1.1.0
-    created: "2023-09-22T14:33:09.869696+02:00"
-    description: Wegas War Manager Rancher Chart
-    digest: c53fa807f6a092a3e4ead2ff560a5f747a0029236cf797ca7de7cff1bd9dff12
-    icon: https://raw.githubusercontent.com/Heigvd/Wegas/master/wegas-app/src/main/webapp/favicon_pink.png
-    name: wegas-war-manager
-    type: application
-    urls:
-    - wegas-war-manager-0.2.0.tgz
-    version: 0.2.0
-  - apiVersion: v2
-    appVersion: 1.0.0
-    created: "2023-09-22T14:33:09.869465+02:00"
-    description: Wegas War Manager Rancher Chart
-    digest: 5f5e0f4f754263eab30bd21eb64f1757f8a60d527759494b342ab9d03dfc8b74
-    icon: https://raw.githubusercontent.com/Heigvd/Wegas/master/wegas-app/src/main/webapp/favicon_pink.png
-    name: wegas-war-manager
-    type: application
-    urls:
-    - wegas-war-manager-0.1.0.tgz
     version: 0.1.0
 generated: "2026-03-11T17:59:09.246905+01:00"
