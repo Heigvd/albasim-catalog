@@ -1,1 +1,0 @@
-# Wegas War Manager
