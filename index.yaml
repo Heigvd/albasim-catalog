@@ -3,29 +3,7 @@ entries:
   colab:
   - apiVersion: v2
     appVersion: 1.0.0
-    created: "2026-06-23T10:09:25.305653+02:00"
-    description: The co.LAB platform
-    digest: e4b38a99022382c731c9b3eb09cae4717240dfedbe0796c4933b46a93f9e7542
-    icon: https://raw.githubusercontent.com/Heigvd/colab/main/colab-webapp/src/main/node/app/public/favicon_128.png
-    name: colab
-    type: application
-    urls:
-    - colab-2.2.1.tgz
-    version: 2.2.1
-  - apiVersion: v2
-    appVersion: 1.0.0
-    created: "2026-06-23T10:09:25.305368+02:00"
-    description: The co.LAB platform
-    digest: b36b81572b66e1cd4a353a9288fd11559352597dcef30aa6aae94d5b5c07e9bd
-    icon: https://raw.githubusercontent.com/Heigvd/colab/main/colab-webapp/src/main/node/app/public/favicon_128.png
-    name: colab
-    type: application
-    urls:
-    - colab-2.2.0.tgz
-    version: 2.2.0
-  - apiVersion: v2
-    appVersion: 1.0.0
-    created: "2026-06-23T10:09:25.305046+02:00"
+    created: "2026-04-23T13:42:36.933286+02:00"
     description: The co.LAB platform
     digest: e70b604a4d3b8fd363c11616853247dbce46fada2db8fa65ee8c533e5cd27772
     icon: https://raw.githubusercontent.com/Heigvd/colab/main/colab-webapp/src/main/node/app/public/favicon_128.png
@@ -36,7 +14,7 @@ entries:
     version: 2.1.1
   - apiVersion: v2
     appVersion: 1.0.0
-    created: "2026-06-23T10:09:25.304713+02:00"
+    created: "2026-04-23T13:42:36.932812+02:00"
     description: The co.LAB platform
     digest: 713b5f64eb0b54a1c807052ff83cfe75c447f986178f37813ee82ee849f216eb
     icon: https://raw.githubusercontent.com/Heigvd/colab/main/colab-webapp/src/main/node/app/public/favicon_128.png
@@ -47,7 +25,7 @@ entries:
     version: 2.1.0
   - apiVersion: v2
     appVersion: 1.0.0
-    created: "2026-06-23T10:09:25.304385+02:00"
+    created: "2026-04-23T13:42:36.932358+02:00"
     description: The co.LAB platform
     digest: b31f6105408acd9c4854ea5e12cec27e7657a7049ba9be53f6cd2e587d1fa42b
     icon: https://raw.githubusercontent.com/Heigvd/colab/main/colab-webapp/src/main/node/app/public/favicon_128.png
@@ -58,7 +36,7 @@ entries:
     version: 2.0.0
   - apiVersion: v2
     appVersion: 1.0.0
-    created: "2026-06-23T10:09:25.304048+02:00"
+    created: "2026-04-23T13:42:36.931255+02:00"
     description: The co.LAB platform
     digest: 62ebc53c9668c2fdaa15a9fe7d534b86b7131894223b72b4f6b97ff0cf680859
     icon: https://raw.githubusercontent.com/Heigvd/colab/main/colab-webapp/src/main/node/app/public/favicon_128.png
@@ -69,7 +47,7 @@ entries:
     version: 1.1.0
   - apiVersion: v2
     appVersion: 1.0.0
-    created: "2026-06-23T10:09:25.303746+02:00"
+    created: "2026-04-23T13:42:36.930817+02:00"
     description: The co.LAB platform
     digest: fbb2a312a78f24d7dae2095992aea97b3f11d2a3fe2b2bb28980a87eb8475d35
     icon: https://raw.githubusercontent.com/Heigvd/colab/main/colab-webapp/src/main/node/app/public/favicon_128.png
@@ -80,7 +58,7 @@ entries:
     version: 1.0.1
   - apiVersion: v2
     appVersion: 1.0.0
-    created: "2026-06-23T10:09:25.303461+02:00"
+    created: "2026-04-23T13:42:36.929123+02:00"
     description: The co.LAB platform
     digest: f20b2b5cc0d6f55b9dc550b3395f21e7c2d662aca5e2d62aabd750b44c5d50cc
     icon: https://raw.githubusercontent.com/Heigvd/colab/main/colab-webapp/src/main/node/app/public/favicon_128.png
@@ -92,62 +70,40 @@ entries:
   wegas:
   - apiVersion: v2
     appVersion: 1.0.0
-    created: "2026-06-23T10:09:25.309356+02:00"
+    created: "2026-04-23T13:42:36.937213+02:00"
     description: The Web Game Authoring System
-    digest: 37a92773add62932412e29fb1348211bfe1d5a1d61010952430783fd7cd7b761
+    digest: 7da3ca09dad317c620ca9d03dfabd8a3c9b0b6a5ac96ab7faf319e118e38a70b
     icon: https://raw.githubusercontent.com/Heigvd/Wegas/master/wegas-app/src/main/webapp/wegas-app/images/logo_wegas_130.png
     name: wegas
     type: application
     urls:
-    - wegas-2.1.4.tgz
-    version: 2.1.4
+    - wegas-2.0.4.tgz
+    version: 2.0.4
   - apiVersion: v2
     appVersion: 1.0.0
-    created: "2026-06-23T10:09:25.308479+02:00"
+    created: "2026-04-23T13:42:36.936669+02:00"
     description: The Web Game Authoring System
-    digest: 3fb2ee85d21e97384f413d556e9997904ebc96758e9793cec2b3e2c514473bf7
+    digest: 8734cab501690abdf91b5195580e27543fe43b1572223b181d93a8e849274350
     icon: https://raw.githubusercontent.com/Heigvd/Wegas/master/wegas-app/src/main/webapp/wegas-app/images/logo_wegas_130.png
     name: wegas
     type: application
     urls:
-    - wegas-2.1.3.tgz
-    version: 2.1.3
+    - wegas-2.0.3.tgz
+    version: 2.0.3
   - apiVersion: v2
     appVersion: 1.0.0
-    created: "2026-06-23T10:09:25.308181+02:00"
+    created: "2026-04-23T13:42:36.936242+02:00"
     description: The Web Game Authoring System
-    digest: cd46530f62185b0341125df019c11a98d81d8f5105a77a789ebf67827faf5d77
+    digest: bf1d5c701ac0a47e051631730dae812ef0b021b13fd714ea3201c2ee155c63bd
     icon: https://raw.githubusercontent.com/Heigvd/Wegas/master/wegas-app/src/main/webapp/wegas-app/images/logo_wegas_130.png
     name: wegas
     type: application
     urls:
-    - wegas-2.1.2.tgz
-    version: 2.1.2
+    - wegas-2.0.2.tgz
+    version: 2.0.2
   - apiVersion: v2
     appVersion: 1.0.0
-    created: "2026-06-23T10:09:25.30787+02:00"
-    description: The Web Game Authoring System
-    digest: 05203c041ac09b16411c9011f32d364a8da938a64b7f085a45f90064d08f7e94
-    icon: https://raw.githubusercontent.com/Heigvd/Wegas/master/wegas-app/src/main/webapp/wegas-app/images/logo_wegas_130.png
-    name: wegas
-    type: application
-    urls:
-    - wegas-2.1.1.tgz
-    version: 2.1.1
-  - apiVersion: v2
-    appVersion: 1.0.0
-    created: "2026-06-23T10:09:25.307554+02:00"
-    description: The Web Game Authoring System
-    digest: ed76e22bf43ca70840a3b9e11274e07a31ff4530a7fddbafe56bf858ff9a7576
-    icon: https://raw.githubusercontent.com/Heigvd/Wegas/master/wegas-app/src/main/webapp/wegas-app/images/logo_wegas_130.png
-    name: wegas
-    type: application
-    urls:
-    - wegas-2.1.0.tgz
-    version: 2.1.0
-  - apiVersion: v2
-    appVersion: 1.0.0
-    created: "2026-06-23T10:09:25.307257+02:00"
+    created: "2026-04-23T13:42:36.935681+02:00"
     description: The Web Game Authoring System
     digest: b37aeca74ea3762bafc9f8485283ec5c3fa68d6c977ba2ed5d65fa807136b332
     icon: https://raw.githubusercontent.com/Heigvd/Wegas/master/wegas-app/src/main/webapp/wegas-app/images/logo_wegas_130.png
@@ -158,7 +114,7 @@ entries:
     version: 2.0.0
   - apiVersion: v2
     appVersion: 1.0.0
-    created: "2026-06-23T10:09:25.30696+02:00"
+    created: "2026-04-23T13:42:36.935291+02:00"
     description: The Web Game Authoring System
     digest: 1ef1d0bf08f0d4a6642b13fc7d4371b89592faeb32d71b70cc0e605567a599b8
     icon: https://raw.githubusercontent.com/Heigvd/Wegas/master/wegas-app/src/main/webapp/wegas-app/images/logo_wegas_130.png
@@ -169,7 +125,7 @@ entries:
     version: 1.1.0
   - apiVersion: v2
     appVersion: 1.0.0
-    created: "2026-06-23T10:09:25.306745+02:00"
+    created: "2026-04-23T13:42:36.935052+02:00"
     description: The Web Game Authoring System
     digest: 95352b528780d7e1871aef8c17732668dbc77f9c90f4ed35a193c2cc95ac28e2
     icon: https://raw.githubusercontent.com/Heigvd/Wegas/master/wegas-app/src/main/webapp/wegas-app/images/logo_wegas_130.png
@@ -180,7 +136,7 @@ entries:
     version: 1.0.2
   - apiVersion: v2
     appVersion: 1.0.0
-    created: "2026-06-23T10:09:25.306532+02:00"
+    created: "2026-04-23T13:42:36.934815+02:00"
     description: The Web Game Authoring System
     digest: b415b759117ff8acddf44da1078afc1c0ad4878644cc2e44926d157e2a82b679
     icon: https://raw.githubusercontent.com/Heigvd/Wegas/master/wegas-app/src/main/webapp/wegas-app/images/logo_wegas_130.png
@@ -191,7 +147,7 @@ entries:
     version: 1.0.1
   - apiVersion: v2
     appVersion: 1.0.0
-    created: "2026-06-23T10:09:25.306316+02:00"
+    created: "2026-04-23T13:42:36.934576+02:00"
     description: The Web Game Authoring System
     digest: 16df51c6789a669ca91857f6d3c3d3f4baabf32c7d19e514a7e1cd87b56b68e4
     icon: https://raw.githubusercontent.com/Heigvd/Wegas/master/wegas-app/src/main/webapp/wegas-app/images/logo_wegas_130.png
@@ -202,7 +158,7 @@ entries:
     version: 1.0.0
   - apiVersion: v2
     appVersion: 1.0.0
-    created: "2026-06-23T10:09:25.30609+02:00"
+    created: "2026-04-23T13:42:36.933896+02:00"
     description: The Web Game Authoring System
     digest: d9d9f6df5f283d3d1e1d7b6177e612964e33a8ad095dc0468799b1197872b3e4
     icon: https://raw.githubusercontent.com/Heigvd/Wegas/master/wegas-app/src/main/webapp/wegas-app/images/logo_wegas_130.png
@@ -213,7 +169,7 @@ entries:
     version: 0.2.0
   - apiVersion: v2
     appVersion: 1.0.0
-    created: "2026-06-23T10:09:25.305861+02:00"
+    created: "2026-04-23T13:42:36.933618+02:00"
     description: The Web Game Authoring System
     digest: c0a9bc9d0333bd5d17fc5dfb0cf8d6e0c3f54650e6fc0ea536d981356f893aa6
     icon: https://raw.githubusercontent.com/Heigvd/Wegas/master/wegas-app/src/main/webapp/wegas-app/images/logo_wegas_130.png
@@ -222,4 +178,4 @@ entries:
     urls:
     - wegas-0.1.0.tgz
     version: 0.1.0
-generated: "2026-06-23T10:09:25.302234+02:00"
+generated: "2026-04-23T13:42:36.927737+02:00"

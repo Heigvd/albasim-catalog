@@ -1,9 +1,9 @@
 # albasim-catalog
 
-Rancher Helm catalog
- * wegas-war-manager
+Helm catalog
  * wegas 
  * colab
+ * grafana-backup
 
 ## Rebuild packages and index
 
