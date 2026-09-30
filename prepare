@@ -1,0 +1,65 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+force=0
+args=()
+for arg in "$@"; do
+  case "$arg" in
+    -f|--force) force=1 ;;
+    *) args+=("$arg") ;;
+  esac
+done
+
+if [[ ${#args[@]} -ne 1 ]]; then
+  echo "Usage: $0 [-f|--force] <project>" >&2
+  exit 1
+fi
+
+project_input="${args[0]}"
+script_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+charts_dir="$script_dir/charts"
+
+project_input_lc="$(printf '%s' "$project_input" | tr '[:upper:]' '[:lower:]')"
+
+project_dir=""
+for d in "$charts_dir"/*/; do
+  name="$(basename "$d")"
+  name_lc="$(printf '%s' "$name" | tr '[:upper:]' '[:lower:]')"
+  if [[ "$name_lc" == "$project_input_lc" ]]; then
+    project_dir="$d"
+    break
+  fi
+done
+
+if [[ -z "$project_dir" ]]; then
+  echo "Error: no chart project matching '$project_input' found in ${charts_dir#"$script_dir"/}" >&2
+  exit 1
+fi
+
+versions=()
+for d in "$project_dir"v*/; do
+  [[ -d "$d" ]] || continue
+  b="$(basename "$d")"
+  versions+=("$b")
+done
+
+if [[ ${#versions[@]} -eq 0 ]]; then
+  echo "Error: no version folders found in ${project_dir#"$script_dir"/}" >&2
+  exit 1
+fi
+
+last_version=$(printf '%s\n' "${versions[@]}" | sort -V | tail -n1)
+next_dir="${project_dir}next"
+next_dir_rel="${next_dir#"$script_dir"/}"
+
+if [[ -e "$next_dir" ]]; then
+  if [[ "$force" -eq 1 ]]; then
+    rm -rf "$next_dir"
+  else
+    echo "Error: $next_dir_rel already exists. Use -f/--force to recreate it." >&2
+    exit 1
+  fi
+fi
+
+cp -R "${project_dir}${last_version}" "$next_dir"
+echo "Copied ${project_dir#"$script_dir"/}${last_version} -> $next_dir_rel"
