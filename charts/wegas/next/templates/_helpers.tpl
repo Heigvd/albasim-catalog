@@ -19,3 +19,25 @@ We truncate at 63 chars because some Kubernetes name fields are limited to this 
 {{- end -}}
 {{- end -}}
 {{- end -}}
+
+{{/*
+Name of the Secret holding the database password.
+Defaults to the chart-managed one; overridden by db.existingSecret.
+*/}}
+{{- define "wegas.dbSecretName" -}}
+{{- .Values.db.existingSecret | default (printf "%s-secret" (include "wegas.fullname" .)) -}}
+{{- end -}}
+
+{{/*
+Name of the Secret holding wegas.properties.
+*/}}
+{{- define "wegas.propertiesSecretName" -}}
+{{- .Values.wegas.existingPropertiesSecret | default (printf "%s-properties" (include "wegas.fullname" .)) -}}
+{{- end -}}
+
+{{/*
+Name of the Secret holding the backup S3 credentials.
+*/}}
+{{- define "wegas.backupSecretName" -}}
+{{- .Values.backup.existingSecret | default (printf "%s-backup-secret" (include "wegas.fullname" .)) -}}
+{{- end -}}

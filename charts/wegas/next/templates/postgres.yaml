@@ -62,7 +62,7 @@ spec:
               valueFrom:
                 secretKeyRef:
                   key: DB_PASSWORD
-                  name: {{ template "wegas.fullname" . }}-secret
+                  name: {{ include "wegas.dbSecretName" . }}
                   optional: false
           startupProbe:
             failureThreshold: 60

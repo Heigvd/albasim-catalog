@@ -6,8 +6,6 @@ data:
   JAVA_HEAP: {{ .Values.wegas.java_heap }}M
   NB_POPULATORS: {{ .Values.wegas.nbpopulators | quote }}
   NB_THREADS: {{ mul .Values.wegas.nbthreads 2 | quote }}
-  wegas.properties: |-
-{{ .Values.wegas.wegas_properties | indent 4 }}
 metadata:
   name: {{ template "wegas.fullname" . }}-config
   labels:
@@ -15,3 +13,19 @@ metadata:
     chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
     release: {{ .Release.Name }}
     heritage: {{ .Release.Service }}
+{{- if not .Values.wegas.existingPropertiesSecret }}
+---
+apiVersion: v1
+kind: Secret
+type: Opaque
+stringData:
+  wegas.properties: |-
+{{ .Values.wegas.wegas_properties | indent 4 }}
+metadata:
+  name: {{ template "wegas.fullname" . }}-properties
+  labels:
+    app: {{ template "wegas.fullname" . }}
+    chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+{{- end }}

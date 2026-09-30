@@ -26,6 +26,7 @@ spec:
         externalUrl: {{ .Values.ingress.hostname }}
       annotations:
         checksum/config: {{ include (print $.Template.BasePath "/configmap.yaml") . | sha256sum }}
+        checksum/properties: {{ include "wegas.propertiesSecretName" . | sha256sum }}
         rollme: {{ randAlphaNum 5 | quote }}
     spec:
       affinity:
@@ -114,7 +115,7 @@ spec:
               valueFrom:
                 secretKeyRef:
                   key: DB_PASSWORD
-                  name: {{ template "wegas.fullname" . }}-secret
+                  name: {{ include "wegas.dbSecretName" . }}
                   optional: false
             - name: DB_HOST
               value: {{ template "wegas.fullname" . }}-psql
@@ -156,6 +157,6 @@ spec:
               name: wegas-config-file
       volumes:
         - name: wegas-config-file
-          configMap:
-            name: {{ template "wegas.fullname" . }}-config
+          secret:
+            secretName: {{ include "wegas.propertiesSecretName" . }}
             defaultMode: 420
