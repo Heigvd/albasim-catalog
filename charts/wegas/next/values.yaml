@@ -3,6 +3,8 @@ ingress:
   hostname: null
 wegas:
   replicas: 1
+  # Key: wegas.properties
+  existingPropertiesSecret: ""
   payaratag: latest
   java_heap: '1500'
   cpuRequest: 500m
@@ -50,7 +52,9 @@ wegas:
 db:
   name: wegas_dev
   user: user
-  password: "1234"
+  password: "1234"        # ignored when existingSecret is set
+  # Key: DB_PASSWORD
+  existingSecret: ""
   useExistingClaim: false
   existingClaim: ""
   size: 10Gi
@@ -61,7 +65,10 @@ mongo:
 backup:
   enabled: false
   suspend: false
-  pull_secret:
+  # Keys: S3_backup_key, S3_backup_secret, backup_encryption_password
+  existingSecret: ""
+  # Must already exist in the namespace. Defaults to the name ghcr-pull-secret.
+  imagePullSecretName: ""
   s3:
     key:
     secret:
