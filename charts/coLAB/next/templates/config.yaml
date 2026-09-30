@@ -1,7 +1,9 @@
+{{- if not .Values.colab.existingPropertiesSecret }}
 ---
 apiVersion: v1
-kind: ConfigMap
-data:
+kind: Secret
+type: Opaque
+stringData:
   colab.properties: |-
     colab.smtp.domain={{ .Values.colab.smtp.domain }}
     colab.smtp.auth={{ .Values.colab.smtp.auth }}
@@ -16,12 +18,13 @@ data:
     colab.yjs.internalurl=http://{{ template "colab.fullname" . }}-yjs:4321
 {{ .Values.colab.extraproperties | indent 4 }}
 metadata:
-  name: {{ template "colab.fullname" . }}-user-config
+  name: {{ template "colab.fullname" . }}-properties
   labels:
     app: {{ template "colab.fullname" . }}
     chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
     release: {{ .Release.Name }}
     heritage: {{ .Release.Service }}
+{{- end }}
 ---
 apiVersion: v1
 kind: ConfigMap
@@ -41,12 +44,14 @@ metadata:
     chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
     release: {{ .Release.Name }}
     heritage: {{ .Release.Service }}
+{{- if not .Values.existingSecret }}
 ---
 apiVersion: v1
-data:
-  COLAB_DEFAULT_ADMIN_PASSWORD: {{ .Values.colab.admin.password | b64enc }}
-  COLAB_DATABASE_PASSWORD: {{ .Values.db.password | b64enc }}
 kind: Secret
+type: Opaque
+stringData:
+  COLAB_DEFAULT_ADMIN_PASSWORD: {{ .Values.colab.admin.password | quote }}
+  COLAB_DATABASE_PASSWORD: {{ .Values.db.password | quote }}
 metadata:
   name: {{ template "colab.fullname" . }}-secret
   labels:
@@ -54,5 +59,4 @@ metadata:
     chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
     release: {{ .Release.Name }}
     heritage: {{ .Release.Service }}
-type: Opaque
-
+{{- end }}

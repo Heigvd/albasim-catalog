@@ -27,12 +27,12 @@ spec:
                 valueFrom:
                   secretKeyRef:
                     key: S3_backup_key
-                    name: {{ template "colab.fullname" . }}-backup-secret
+                    name: {{ include "colab.backupSecretName" . }}
               - name: RCLONE_CONFIG_BACKUP_SECRET_ACCESS_KEY
                 valueFrom:
                   secretKeyRef:
                     key: S3_backup_secret
-                    name: {{ template "colab.fullname" . }}-backup-secret
+                    name: {{ include "colab.backupSecretName" . }}
               - name: ALBASIM_APP_BACKUP_BUCKET
                 valueFrom:
                   configMapKeyRef:
@@ -77,7 +77,7 @@ spec:
                 valueFrom:
                   secretKeyRef:
                     key: COLAB_DATABASE_PASSWORD
-                    name: {{ template "colab.fullname" . }}-secret
+                    name: {{ include "colab.credsSecretName" . }}
                     optional: false
               - name: MONGO_DBS
                 value: colablexical oak
@@ -87,7 +87,7 @@ spec:
                 valueFrom:
                   secretKeyRef:
                     key: backup_encryption_password
-                    name: {{ template "colab.fullname" . }}-backup-secret
+                    name: {{ include "colab.backupSecretName" . }}
                     optional: false
               image: 'ghcr.io/heigvd/backup-cronjob:1.0.2'
               name: backup-cronjob
@@ -95,5 +95,5 @@ spec:
               command: ["bash", "-c", "/run_backup_psql.sh && /run_backup_mongo.sh"]
           restartPolicy: Never
           imagePullSecrets:
-            - name: ghcr-pull-secret
+            - name: {{ .Values.backup.imagePullSecretName | default "ghcr-pull-secret" }}
   {{ end }}

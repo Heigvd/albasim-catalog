@@ -1,8 +1,12 @@
+# Keys: COLAB_DATABASE_PASSWORD, COLAB_DEFAULT_ADMIN_PASSWORD
+existingSecret: ""
 ingress:
   enabled: true
   hostname: "hostname"
 colab:
   image_tag: 
+  # Key: colab.properties
+  existingPropertiesSecret: ""
   replicas: 1
   java_heap: 500
   memRequest: 500Mi
@@ -20,7 +24,7 @@ colab:
     starttls: true
   admin:
     username: admin
-    password: admin
+    password: admin        # ignored when existingSecret is set
     email: admin@colab.local
   jcr:
     quota_mo: 512
@@ -30,7 +34,7 @@ colab:
 db:
   name: colab
   user: colab
-  password: colab
+  password: colab          # ignored when existingSecret is set
   useExistingClaim: false
   existingClaim: ""
   size: 10Gi
@@ -41,7 +45,10 @@ mongo:
 backup:
   enabled: false
   suspend: false
-  pull_secret:
+  # Keys: S3_backup_key, S3_backup_secret, backup_encryption_password
+  existingSecret: ""
+  # Must already exist in the namespace. Defaults to the name ghcr-pull-secret.
+  imagePullSecretName: ""
   s3:
     key:
     secret:

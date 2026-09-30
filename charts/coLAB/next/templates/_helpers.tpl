@@ -19,3 +19,25 @@ We truncate at 63 chars because some Kubernetes name fields are limited to this 
 {{- end -}}
 {{- end -}}
 {{- end -}}
+
+{{/*
+Name of the Secret holding the database and default-admin passwords.
+Both live in one Secret, so the knob is top-level rather than under db.
+*/}}
+{{- define "colab.credsSecretName" -}}
+{{- .Values.existingSecret | default (printf "%s-secret" (include "colab.fullname" .)) -}}
+{{- end -}}
+
+{{/*
+Name of the Secret holding colab.properties.
+*/}}
+{{- define "colab.propertiesSecretName" -}}
+{{- .Values.colab.existingPropertiesSecret | default (printf "%s-properties" (include "colab.fullname" .)) -}}
+{{- end -}}
+
+{{/*
+Name of the Secret holding the backup S3 credentials.
+*/}}
+{{- define "colab.backupSecretName" -}}
+{{- .Values.backup.existingSecret | default (printf "%s-backup-secret" (include "colab.fullname" .)) -}}
+{{- end -}}
