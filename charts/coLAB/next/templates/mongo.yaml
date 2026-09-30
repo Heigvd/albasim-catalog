@@ -1,4 +1,3 @@
----
 {{- if not .Values.mongo.useExistingClaim -}}
 kind: PersistentVolumeClaim
 apiVersion: v1
@@ -17,7 +16,7 @@ spec:
       storage: {{ .Values.mongo.size | quote }}
   storageClassName: switch-cloud-performance-retain
 ---
-{{- end -}}
+{{- end }}
 apiVersion: v1
 kind: Service
 metadata:

@@ -83,6 +83,7 @@ spec:
         externalUrl: {{ .Values.ingress.hostname }}
       annotations:
         checksum/config: {{ include (print $.Template.BasePath "/config.yaml") . | sha256sum }}
+        checksum/properties: {{ include "colab.propertiesSecretName" . | sha256sum }}
         rollme: {{ randAlphaNum 5 | quote }}
     spec:
       affinity:
@@ -149,7 +150,7 @@ spec:
               valueFrom:
                 secretKeyRef:
                   key: COLAB_DATABASE_PASSWORD
-                  name: {{ template "colab.fullname" . }}-secret
+                  name: {{ include "colab.credsSecretName" . }}
                   optional: false
 
             ##
@@ -165,7 +166,7 @@ spec:
               valueFrom:
                 secretKeyRef:
                   key: COLAB_DEFAULT_ADMIN_PASSWORD
-                  name: {{ template "colab.fullname" . }}-secret
+                  name: {{ include "colab.credsSecretName" . }}
                   optional: false
 
             - name: COLAB_DEFAULT_ADMIN_USERNAME
@@ -235,8 +236,8 @@ spec:
             - mountPath: /etc/colab
               name: colab-config-file
       volumes:
-        - configMap:
-            name: {{ template "colab.fullname" . }}-user-config
+        - secret:
+            secretName: {{ include "colab.propertiesSecretName" . }}
             defaultMode: 420
           name: colab-config-file
 ---

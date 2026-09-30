@@ -1,4 +1,3 @@
----
 {{- if not .Values.db.useExistingClaim -}}
 kind: PersistentVolumeClaim
 apiVersion: v1
@@ -79,7 +78,7 @@ spec:
               valueFrom:
                 secretKeyRef:
                   key: COLAB_DATABASE_PASSWORD
-                  name: {{ template "colab.fullname" . }}-secret
+                  name: {{ include "colab.credsSecretName" . }}
                   optional: false
           livenessProbe:
             exec:
