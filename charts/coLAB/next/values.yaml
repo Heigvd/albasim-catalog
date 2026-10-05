@@ -1,5 +1,9 @@
 # Keys: COLAB_DATABASE_PASSWORD, COLAB_DEFAULT_ADMIN_PASSWORD
 existingSecret: ""
+otel:
+  enabled: false
+  endpoint: ""
+  resourceAttributes: ""
 ingress:
   enabled: true
   hostname: "hostname"

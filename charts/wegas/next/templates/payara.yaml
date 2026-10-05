@@ -141,6 +141,17 @@ spec:
                   key: NB_THREADS
                   name: {{ template "wegas.fullname" . }}-config
                   optional: false
+            {{- $otel := .Values.otel | default dict }}
+            - name: OTEL_ENABLED
+              value: {{ $otel.enabled | default false | quote }}
+            {{- if $otel.enabled }}
+            - name: OTEL_EXPORTER_OTLP_ENDPOINT
+              value: {{ required "wegas: otel.endpoint must be set when otel.enabled is true" $otel.endpoint | quote }}
+            {{- if $otel.resourceAttributes }}
+            - name: OTEL_RESOURCE_ATTRIBUTES
+              value: {{ $otel.resourceAttributes | quote }}
+            {{- end }}
+            {{- end }}
           securityContext:
             allowPrivilegeEscalation: false
             privileged: false
