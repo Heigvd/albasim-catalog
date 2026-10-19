@@ -1,0 +1,100 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+if [[ $# -ne 2 ]]; then
+  echo "Usage: $0 <project> <major|minor|patch>" >&2
+  exit 1
+fi
+
+project_input="$1"
+level="$(printf '%s' "$2" | tr '[:upper:]' '[:lower:]')"
+
+case "$level" in
+  major|minor|patch) ;;
+  *) echo "Error: upgrade level must be major, minor or patch (got '$2')" >&2; exit 1 ;;
+esac
+
+if ! command -v helm >/dev/null 2>&1; then
+  echo "Error: helm is required but not installed" >&2
+  exit 1
+fi
+
+script_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+charts_dir="$script_dir/charts"
+
+project_input_lc="$(printf '%s' "$project_input" | tr '[:upper:]' '[:lower:]')"
+
+project_dir=""
+for d in "$charts_dir"/*/; do
+  name="$(basename "$d")"
+  name_lc="$(printf '%s' "$name" | tr '[:upper:]' '[:lower:]')"
+  if [[ "$name_lc" == "$project_input_lc" ]]; then
+    project_dir="$d"
+    break
+  fi
+done
+
+if [[ -z "$project_dir" ]]; then
+  echo "Error: no chart project matching '$project_input' found in ${charts_dir#"$script_dir"/}" >&2
+  exit 1
+fi
+
+next_dir="${project_dir}next"
+
+if [[ ! -d "$next_dir" ]]; then
+  echo "Error: ${next_dir#"$script_dir"/} does not exist. Run ./prepare $project_input first." >&2
+  exit 1
+fi
+
+versions=()
+for d in "$project_dir"v*/; do
+  [[ -d "$d" ]] || continue
+  versions+=("$(basename "$d")")
+done
+
+if [[ ${#versions[@]} -eq 0 ]]; then
+  echo "Error: no version folders found in ${project_dir#"$script_dir"/}" >&2
+  exit 1
+fi
+
+last_version=$(printf '%s\n' "${versions[@]}" | sort -V | tail -n1)
+
+if [[ ! "$last_version" =~ ^v([0-9]+)\.([0-9]+)\.([0-9]+)$ ]]; then
+  echo "Error: latest version folder '$last_version' is not in vMAJOR.MINOR.PATCH format" >&2
+  exit 1
+fi
+major="${BASH_REMATCH[1]}"
+minor="${BASH_REMATCH[2]}"
+patch="${BASH_REMATCH[3]}"
+
+case "$level" in
+  major) major=$((major + 1)); minor=0; patch=0 ;;
+  minor) minor=$((minor + 1)); patch=0 ;;
+  patch) patch=$((patch + 1)) ;;
+esac
+
+new_version="$major.$minor.$patch"
+new_dir="${project_dir}v${new_version}"
+
+if [[ -e "$new_dir" ]]; then
+  echo "Error: ${new_dir#"$script_dir"/} already exists" >&2
+  exit 1
+fi
+
+mv "$next_dir" "$new_dir"
+
+chart_file="$new_dir/Chart.yaml"
+tmp_file="$(mktemp)"
+sed "s/^version:.*/version: $new_version/" "$chart_file" > "$tmp_file"
+cat "$tmp_file" > "$chart_file"
+rm -f "$tmp_file"
+
+find "$new_dir" -name '.DS_Store' -delete
+
+echo "Released ${last_version} -> v${new_version} (${new_dir#"$script_dir"/})"
+
+helm package "$new_dir" --destination "$script_dir" >/dev/null
+(cd "$script_dir" && helm repo index .)
+echo "Packaged ${project_input_lc}-${new_version}.tgz and updated index.yaml"
+
+"$script_dir/prepare" "$project_input"

@@ -1,0 +1,58 @@
+{{- if .Values.ingress.enabled -}}
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: {{ template "colab.fullname" . }}-yjs
+  labels:
+    app: {{ template "colab.fullname" . }}
+    chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+  annotations:
+    #traefik.ingress.kubernetes.io/max-conn-extractor-func: request.host
+spec:
+  rules:
+  - host: {{ .Values.ingress.hostname }}
+    http:
+      paths:
+      - backend:
+          service:
+            name: {{ template "colab.fullname" . }}-yjs
+            port: 
+              number: 4321
+        pathType: Prefix
+        path: /yjs
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: {{ template "colab.fullname" . }}
+  labels:
+    app: {{ template "colab.fullname" . }}
+    chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+  annotations:
+    nginx.ingress.kubernetes.io/proxy-body-size: 100m
+    cert-manager.io/cluster-issuer: "letsencrypt-prod"
+    # ingress.kubernetes.io/protocol: https
+    nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"
+    # traefik.ingress.kubernetes.io/max-conn-extractor-func: request.host
+spec:
+  tls:
+  - hosts:
+    - {{ .Values.ingress.hostname }}
+    secretName: {{ .Values.ingress.hostname }}-tls
+  ingressClassName: nginx
+  rules:
+  - host: {{ .Values.ingress.hostname }}
+    http:
+      paths:
+      - backend:
+          service:
+            name: {{ template "colab.fullname" . }}-service
+            port:
+              number: 8181
+        pathType: Prefix
+        path: /
+{{- end -}}

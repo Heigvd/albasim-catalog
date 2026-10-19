@@ -27,12 +27,12 @@ spec:
                 valueFrom:
                   secretKeyRef:
                     key: S3_backup_key
-                    name: {{ template "wegas.fullname" . }}-backup-secret
+                    name: {{ include "wegas.backupSecretName" . }}
               - name: RCLONE_CONFIG_BACKUP_SECRET_ACCESS_KEY
                 valueFrom:
                   secretKeyRef:
                     key: S3_backup_secret
-                    name: {{ template "wegas.fullname" . }}-backup-secret
+                    name: {{ include "wegas.backupSecretName" . }}
               - name: ALBASIM_APP_BACKUP_BUCKET
                 valueFrom:
                   configMapKeyRef:
@@ -77,7 +77,7 @@ spec:
                 valueFrom:
                   secretKeyRef:
                     key: DB_PASSWORD
-                    name: {{ template "wegas.fullname" . }}-secret
+                    name: {{ include "wegas.dbSecretName" . }}
                     optional: false
               - name: MONGO_DBS
                 value: oak
@@ -87,7 +87,7 @@ spec:
                 valueFrom:
                   secretKeyRef:
                     key: backup_encryption_password
-                    name: {{ template "wegas.fullname" . }}-backup-secret
+                    name: {{ include "wegas.backupSecretName" . }}
                     optional: false
               image: 'ghcr.io/heigvd/backup-cronjob:1.0.2'
               name: backup-cronjob
@@ -105,5 +105,5 @@ spec:
                   type: RuntimeDefault
           restartPolicy: Never
           imagePullSecrets:
-            - name: ghcr-pull-secret
+            - name: {{ .Values.backup.imagePullSecretName | default "ghcr-pull-secret" }}
   {{ end }}
