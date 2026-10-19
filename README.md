@@ -18,11 +18,31 @@ The project name is case-insensitive. Edit the chart under `next/` (bump `Chart.
 update templates/values, etc.) — since it starts as an exact copy of the last release,
 `git diff charts/<project>/next` shows exactly what changed for the new version.
 
-Once the release is ready, rename `next/` to the new version folder (e.g. `v2.1.5/`)
-before packaging (see below).
+Once the changes in `next/` are ready, publish them with `release` (see below).
 
 Re-running `./prepare` on a project that already has a `next` folder fails to avoid
 overwriting work in progress; pass `-f`/`--force` to discard it and start over.
+
+## Create a release
+
+Use the `release` script once the `next` folder is ready. It takes the project and the
+upgrade level (`major`, `minor` or `patch`, case-insensitive):
+
+```sh
+./release wegas minor   # v2.1.4 -> v2.2.0
+./release colab patch   # v2.2.1 -> v2.2.2
+```
+
+The script:
+
+1. computes the new version from the latest `vX.Y.Z` folder and the upgrade level,
+2. moves `next/` to the new version folder and sets `version` in its `Chart.yaml`,
+3. packages the chart (`<project>-<version>.tgz` at the repo root) and updates `index.yaml`,
+4. runs `prepare` to create a fresh `next/` from the new release.
+
+It requires `helm` and an existing `next/` folder (run `./prepare <project>` first).
+Then review the changes, `git commit` the new version folder, the `.tgz`, `index.yaml`
+and `next/`, and `push`.
 
 ## Rebuild packages and index
 
