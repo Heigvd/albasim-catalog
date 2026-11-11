@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: ConfigMap
+data:
+  backup_bucket: {{ .Values.backup.s3.bucket }}
+  rclone_type: {{ .Values.backup.s3.rclone_type }}
+  rclone_provider: {{ .Values.backup.s3.rclone_provider }}
+  rclone_endpoint: {{ .Values.backup.s3.rclone_endpoint }}
+metadata:
+  name: {{ template "wegas.fullname" . }}-backup-configmap
+  labels:
+    app: {{ template "wegas.fullname" . }}
+    chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}

@@ -17,7 +17,7 @@ wegas:
   nbpopulators: 3
   nbthreads: 9
   docker:
-    image: 'ghcr.io/heigvd/wegas-next'
+    image: 'ghcr.io/heigvd/wegas'
     tag: latest
   wegas_properties: |
     favicon=favicon_black
@@ -36,7 +36,7 @@ wegas:
     mail.smtp.password=
     mail.smtp.auth=true
     mail.smtp.port=587
-    
+
     # DeepL PRO API
     ###########################################3
     deepl.service_url=
