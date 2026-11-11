@@ -1,7 +1,7 @@
 # albasim-catalog
 
 Helm catalog
- * wegas 
+ * wegas
  * colab
  * grafana-backup
 
@@ -44,7 +44,7 @@ It requires `helm` and an existing `next/` folder (run `./prepare <project>` fir
 Then review the changes, `git commit` the new version folder, the `.tgz`, `index.yaml`
 and `next/`, and `push`.
 
-## Rebuild packages and index
+## Rebuild packages and index by hand
 
 ### example for colab 1.0
 
