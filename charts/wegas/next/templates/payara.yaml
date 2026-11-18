@@ -141,6 +141,10 @@ spec:
                   key: NB_THREADS
                   name: {{ template "wegas.fullname" . }}-config
                   optional: false
+            {{- if .Values.wegas.javaToolOptions }}
+            - name: JAVA_TOOL_OPTIONS
+              value: {{ .Values.wegas.javaToolOptions | quote }}
+            {{- end }}
             {{- $otel := .Values.otel | default dict }}
             - name: OTEL_ENABLED
               value: {{ $otel.enabled | default false | quote }}

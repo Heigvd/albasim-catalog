@@ -222,6 +222,10 @@ spec:
                   optional: true
             - name: SYSTEM_PROPS
               value: /etc/colab/colab.properties
+            {{- if .Values.colab.javaToolOptions }}
+            - name: JAVA_TOOL_OPTIONS
+              value: {{ .Values.colab.javaToolOptions | quote }}
+            {{- end }}
             {{- $otel := .Values.otel | default dict }}
             - name: OTEL_ENABLED
               value: {{ $otel.enabled | default false | quote }}

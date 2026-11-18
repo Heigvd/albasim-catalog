@@ -11,6 +11,10 @@ wegas:
   existingPropertiesSecret: ""
   payaratag: latest
   java_heap: '1500'
+  # Passed to the JVM through JAVA_TOOL_OPTIONS. Default is a workaround for the reported
+  # AVX-512 Base64 decoder bug in JDK 17.0.6+; it only costs Base64 throughput.
+  # Set to "" to remove the variable.
+  javaToolOptions: "-XX:-UseBASE64Intrinsics"
   cpuRequest: 500m
   cpuLimit: 1800m
   memLimit: 3800Mi

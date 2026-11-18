@@ -1,0 +1,62 @@
+{{- if not .Values.colab.existingPropertiesSecret }}
+---
+apiVersion: v1
+kind: Secret
+type: Opaque
+stringData:
+  colab.properties: |-
+    colab.smtp.domain={{ .Values.colab.smtp.domain }}
+    colab.smtp.auth={{ .Values.colab.smtp.auth }}
+    colab.smtp.username={{ .Values.colab.smtp.username }}
+    colab.smtp.password={{ .Values.colab.smtp.password }}
+    colab.smtp.host={{ .Values.colab.smtp.host }}
+    colab.smtp.port={{ .Values.colab.smtp.port }}
+    colab.smtp.starttls={{ .Values.colab.smtp.starttls }}
+    colab.jcr.maxfile.size.mo={{ .Values.colab.jcr.maxfile_size_mo }}
+    colab.jcr.project.quota.mo={{ .Values.colab.jcr.quota_mo }}
+    colab.yjs.url=wss://{{ .Values.ingress.hostname }}/yjs
+    colab.yjs.internalurl=http://{{ template "colab.fullname" . }}-yjs:4321
+{{ .Values.colab.extraproperties | indent 4 }}
+metadata:
+  name: {{ template "colab.fullname" . }}-properties
+  labels:
+    app: {{ template "colab.fullname" . }}
+    chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+{{- end }}
+---
+apiVersion: v1
+kind: ConfigMap
+data:
+  COLAB_DATABASE_NAME: {{ .Values.db.name }}
+  COLAB_DATABASE_USER: {{ .Values.db.user }}
+  COLAB_DEFAULT_ADMIN_USERNAME: {{ .Values.colab.admin.username }}
+  COLAB_DEFAULT_ADMIN_EMAIL: {{ .Values.colab.admin.email }}
+  GC: {{ .Values.colab.gc }}
+  HEAP_SIZE: {{ .Values.colab.java_heap }}M
+  MIN_HTTP_THREADS: {{ .Values.colab.min_threads | quote }}
+  MAX_HTTP_THREADS: {{ .Values.colab.max_threads | quote }}
+metadata:
+  name: {{ template "colab.fullname" . }}-hard-config
+  labels:
+    app: {{ template "colab.fullname" . }}
+    chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+{{- if not .Values.existingSecret }}
+---
+apiVersion: v1
+kind: Secret
+type: Opaque
+stringData:
+  COLAB_DEFAULT_ADMIN_PASSWORD: {{ .Values.colab.admin.password | default "" | quote }}
+  COLAB_DATABASE_PASSWORD: {{ .Values.db.password | default "" | quote }}
+metadata:
+  name: {{ template "colab.fullname" . }}-secret
+  labels:
+    app: {{ template "colab.fullname" . }}
+    chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+{{- end }}
